@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XML_DIZ_INFO>
+	<MASTER_PAD_VERSION_INFO>
+		<MASTER_PAD_VERSION>4.0</MASTER_PAD_VERSION>
+		<MASTER_PAD_EDITOR>Hand-written PAD 4.0</MASTER_PAD_EDITOR>
+		<MASTER_PAD_INFO>Portable Application Description, or PAD for short, is a data set that is used by shareware authors to disseminate information to anyone interested in their software products. To find out more go to http://pad.asp-software.org</MASTER_PAD_INFO>
+	</MASTER_PAD_VERSION_INFO>
+	<Company_Info>
+		<Company_Name>Transys</Company_Name>
+		<Address_1></Address_1>
+		<Address_2></Address_2>
+		<City_Town></City_Town>
+		<State_Province></State_Province>
+		<Zip_Postal_Code></Zip_Postal_Code>
+		<Country></Country>
+		<Company_WebSite_URL>https://faizzeya.github.io/transys/</Company_WebSite_URL>
+		<Contact_Info>
+			<Author_First_Name>Faiz ul Haque</Author_First_Name>
+			<Author_Last_Name>Zeya</Author_Last_Name>
+			<Author_Email>faizulhaquezeya@gmail.com</Author_Email>
+			<Contact_First_Name>Faiz ul Haque</Contact_First_Name>
+			<Contact_Last_Name>Zeya</Contact_Last_Name>
+			<Contact_Email>faizulhaquezeya@gmail.com</Contact_Email>
+		</Contact_Info>
+		<Support_Info>
+			<Sales_Email>faizulhaquezeya@gmail.com</Sales_Email>
+			<Support_Email>faizulhaquezeya@gmail.com</Support_Email>
+			<General_Email>faizulhaquezeya@gmail.com</General_Email>
+			<Sales_Phone></Sales_Phone>
+			<Support_Phone></Support_Phone>
+			<General_Phone></General_Phone>
+			<Fax_Phone></Fax_Phone>
+		</Support_Info>
+	</Company_Info>
+	<Program_Info>
+		<Program_Name>Cellular Automata: Conway's Game of Life</Program_Name>
+		<Program_Version>1.0</Program_Version>
+		<Program_Release_Month>10</Program_Release_Month>
+		<Program_Release_Day>04</Program_Release_Day>
+		<Program_Release_Year>2026</Program_Release_Year>
+		<Program_Cost_Dollars>0</Program_Cost_Dollars>
+		<Program_Cost_Other_Code></Program_Cost_Other_Code>
+		<Program_Cost_Other></Program_Cost_Other>
+		<Program_Type>Freeware</Program_Type>
+		<Program_Release_Status>New Release</Program_Release_Status>
+		<Program_Install_Support>No Install Support</Program_Install_Support>
+		<Program_OS_Support>Windows 10,Windows 11</Program_OS_Support>
+		<Program_Language>English</Program_Language>
+		<Program_Change_Info>Initial release</Program_Change_Info>
+		<Program_Specific_Category>Games</Program_Specific_Category>
+		<Program_Category_Class>Games &amp; Entertainment::Simulation</Program_Category_Class>
+		<Program_System_Requirements>Microsoft .NET 8 Desktop Runtime</Program_System_Requirements>
+		<File_Info>
+			<File_Size_Bytes>76349</File_Size_Bytes>
+			<File_Size_K>75</File_Size_K>
+			<File_Size_MB>0.07</File_Size_MB>
+		</File_Info>
+		<Expire_Info>
+			<Has_Expire_Info>N</Has_Expire_Info>
+			<Expire_Count></Expire_Count>
+			<Expire_Based_On></Expire_Based_On>
+			<Expire_Other_Info></Expire_Other_Info>
+			<Expire_Month></Expire_Month>
+			<Expire_Day></Expire_Day>
+			<Expire_Year></Expire_Year>
+		</Expire_Info>
+	</Program_Info>
+	<Program_Descriptions>
+		<English>
+			<Keywords>game of life, conway, cellular automata, cellular automaton, life simulation, simulation, freeware</Keywords>
+			<Char_Desc_45>Conway's Game of Life simulator for Windows</Char_Desc_45>
+			<Char_Desc_80>Watch Conway's Game of Life evolve on a 50 x 50 grid from a random start.</Char_Desc_80>
+			<Char_Desc_250>Cellular Automata is a free Conway's Game of Life simulator for Windows. It fills a 50 x 50 grid with a random pattern of live cells and plays out the generations. Start, pause and reset with one click. A tiny 75 KB download with no installer.</Char_Desc_250>
+			<Char_Desc_450>Cellular Automata is a free Conway's Game of Life simulator for Windows from Transys. It fills a 50 x 50 grid with a random pattern of live cells and plays out the generations according to Conway's rules. Press Start to run the simulation, pause it at any moment, and press Reset for a fresh random pattern. It is a tiny 75 KB download with no installer: unzip and run. Requires Windows 10 or 11 with the Microsoft .NET 8 Desktop Runtime.</Char_Desc_450>
+			<Char_Desc_2000>Cellular Automata is a free Conway's Game of Life simulator for Windows from Transys, written by Faiz ul Haque Zeya.
+
+The Game of Life is the best-known cellular automaton. Each cell on a grid is either alive or dead, and in every generation its fate depends only on its eight neighbours: a live cell with two or three live neighbours survives, a dead cell with exactly three live neighbours comes alive, and every other cell dies or stays empty. From these few rules, surprisingly rich patterns emerge.
+
+The program fills a 50 x 50 grid with a random pattern of live cells and plays out the generations on screen. Press Start to run the simulation, pause it at any moment to study the pattern, and press Reset for a fresh random start. It is a simple way to show students or curious friends how complex behaviour grows out of simple rules.
+
+The program is a tiny 75 KB download with no installer: unzip the archive and run Cellular Automata.exe. It requires Windows 10 or 11 with the Microsoft .NET 8 Desktop Runtime, a free download from Microsoft.
+
+Cellular Automata is freeware. There is nothing to buy, no time limit and no registration.</Char_Desc_2000>
+		</English>
+	</Program_Descriptions>
+	<Web_Info>
+		<Application_URLs>
+			<Application_Info_URL>https://faizzeya.github.io/transys/</Application_Info_URL>
+			<Application_Order_URL></Application_Order_URL>
+			<Application_Screenshot_URL>https://faizzeya.github.io/transys/ca_screenshot.png</Application_Screenshot_URL>
+			<Application_Icon_URL></Application_Icon_URL>
+			<Application_XML_File_URL>https://faizzeya.github.io/transys/ca_pad.xml</Application_XML_File_URL>
+		</Application_URLs>
+		<Download_URLs>
+			<Primary_Download_URL>https://faizzeya.github.io/transys/cafree.zip</Primary_Download_URL>
+			<Secondary_Download_URL></Secondary_Download_URL>
+			<Additional_Download_URL_1></Additional_Download_URL_1>
+			<Additional_Download_URL_2></Additional_Download_URL_2>
+		</Download_URLs>
+	</Web_Info>
+	<Permissions>
+		<Distribution_Permissions>Cellular Automata is freeware. It may be freely distributed over the internet and on any media, provided the archive is unmodified and no fee is charged for the program itself.</Distribution_Permissions>
+		<EULA>Cellular Automata is freeware, copyright Transys. You may use it free of charge on any number of computers. The software is provided "as is", without warranty of any kind; the author is not liable for any damage arising from its use.</EULA>
+	</Permissions>
+</XML_DIZ_INFO>
