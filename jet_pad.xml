@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XML_DIZ_INFO>
+	<MASTER_PAD_VERSION_INFO>
+		<MASTER_PAD_VERSION>4.0</MASTER_PAD_VERSION>
+		<MASTER_PAD_EDITOR>Hand-written PAD 4.0</MASTER_PAD_EDITOR>
+		<MASTER_PAD_INFO>Portable Application Description, or PAD for short, is a data set that is used by shareware authors to disseminate information to anyone interested in their software products. To find out more go to http://pad.asp-software.org</MASTER_PAD_INFO>
+	</MASTER_PAD_VERSION_INFO>
+	<Company_Info>
+		<Company_Name>Transys</Company_Name>
+		<Address_1></Address_1>
+		<Address_2></Address_2>
+		<City_Town></City_Town>
+		<State_Province></State_Province>
+		<Zip_Postal_Code></Zip_Postal_Code>
+		<Country></Country>
+		<Company_WebSite_URL>https://faizzeya.github.io/transys/</Company_WebSite_URL>
+		<Contact_Info>
+			<Author_First_Name>Faiz ul Haque</Author_First_Name>
+			<Author_Last_Name>Zeya</Author_Last_Name>
+			<Author_Email>faizulhaquezeya@gmail.com</Author_Email>
+			<Contact_First_Name>Faiz ul Haque</Contact_First_Name>
+			<Contact_Last_Name>Zeya</Contact_Last_Name>
+			<Contact_Email>faizulhaquezeya@gmail.com</Contact_Email>
+		</Contact_Info>
+		<Support_Info>
+			<Sales_Email>faizulhaquezeya@gmail.com</Sales_Email>
+			<Support_Email>faizulhaquezeya@gmail.com</Support_Email>
+			<General_Email>faizulhaquezeya@gmail.com</General_Email>
+			<Sales_Phone></Sales_Phone>
+			<Support_Phone></Support_Phone>
+			<General_Phone></General_Phone>
+			<Fax_Phone></Fax_Phone>
+		</Support_Info>
+	</Company_Info>
+	<Program_Info>
+		<Program_Name>JET Game</Program_Name>
+		<Program_Version>1.0</Program_Version>
+		<Program_Release_Month>10</Program_Release_Month>
+		<Program_Release_Day>04</Program_Release_Day>
+		<Program_Release_Year>2026</Program_Release_Year>
+		<Program_Cost_Dollars>0</Program_Cost_Dollars>
+		<Program_Cost_Other_Code></Program_Cost_Other_Code>
+		<Program_Cost_Other></Program_Cost_Other>
+		<Program_Type>Freeware</Program_Type>
+		<Program_Release_Status>New Release</Program_Release_Status>
+		<Program_Install_Support>No Install Support</Program_Install_Support>
+		<Program_OS_Support>Windows 10,Windows 11</Program_OS_Support>
+		<Program_Language>English</Program_Language>
+		<Program_Change_Info>Initial release</Program_Change_Info>
+		<Program_Specific_Category>Games</Program_Specific_Category>
+		<Program_Category_Class>Games &amp; Entertainment::Arcade</Program_Category_Class>
+		<Program_System_Requirements>Microsoft .NET 8 Desktop Runtime</Program_System_Requirements>
+		<File_Info>
+			<File_Size_Bytes>76661</File_Size_Bytes>
+			<File_Size_K>75</File_Size_K>
+			<File_Size_MB>0.07</File_Size_MB>
+		</File_Info>
+		<Expire_Info>
+			<Has_Expire_Info>N</Has_Expire_Info>
+			<Expire_Count></Expire_Count>
+			<Expire_Based_On></Expire_Based_On>
+			<Expire_Other_Info></Expire_Other_Info>
+			<Expire_Month></Expire_Month>
+			<Expire_Day></Expire_Day>
+			<Expire_Year></Expire_Year>
+		</Expire_Info>
+	</Program_Info>
+	<Program_Descriptions>
+		<English>
+			<Keywords>jet game, arcade shooter, free game, windows game, aircraft game, shooter, freeware game</Keywords>
+			<Char_Desc_45>Free arcade jet shooter for Windows</Char_Desc_45>
+			<Char_Desc_80>Fly a jet, shoot down the enemies and chase a high score in this free game.</Char_Desc_80>
+			<Char_Desc_250>JET Game is a free arcade shooter for Windows. Steer your jet with the keyboard, fire at the enemies coming at you and build up your score. It is a tiny 75 KB download with no installer: unzip and run.</Char_Desc_250>
+			<Char_Desc_450>JET Game is a free arcade shooter for Windows from Transys. Steer your jet with the keyboard, fire at the enemies coming at you and build up your score. The graphics are simple and the game starts instantly. It is a tiny 75 KB download with no installer: unzip the archive and run JET GAME.exe. Requires Windows 10 or 11 with the Microsoft .NET 8 Desktop Runtime.</Char_Desc_450>
+			<Char_Desc_2000>JET Game is a free arcade shooter for Windows from Transys. Steer your jet with the keyboard, fire at the enemies coming at you and build up your score, which is shown on screen as you play. The graphics are simple and the game starts instantly, so it suits a quick break.
+
+The game is a tiny 75 KB download with no installer: unzip the archive and run JET GAME.exe. It requires Windows 10 or 11 with the Microsoft .NET 8 Desktop Runtime, a free download from Microsoft.
+
+JET Game is freeware. There is nothing to buy, no time limit and no registration.</Char_Desc_2000>
+		</English>
+	</Program_Descriptions>
+	<Web_Info>
+		<Application_URLs>
+			<Application_Info_URL>https://faizzeya.github.io/transys/</Application_Info_URL>
+			<Application_Order_URL></Application_Order_URL>
+			<Application_Screenshot_URL></Application_Screenshot_URL>
+			<Application_Icon_URL></Application_Icon_URL>
+			<Application_XML_File_URL>https://faizzeya.github.io/transys/jet_pad.xml</Application_XML_File_URL>
+		</Application_URLs>
+		<Download_URLs>
+			<Primary_Download_URL>https://faizzeya.github.io/transys/JET.zip</Primary_Download_URL>
+			<Secondary_Download_URL></Secondary_Download_URL>
+			<Additional_Download_URL_1></Additional_Download_URL_1>
+			<Additional_Download_URL_2></Additional_Download_URL_2>
+		</Download_URLs>
+	</Web_Info>
+	<Permissions>
+		<Distribution_Permissions>JET Game is freeware. It may be freely distributed over the internet and on any media, provided the archive is unmodified and no fee is charged for the program itself.</Distribution_Permissions>
+		<EULA>JET Game is freeware, copyright Transys. You may use it free of charge on any number of computers. The software is provided "as is", without warranty of any kind; the author is not liable for any damage arising from its use.</EULA>
+	</Permissions>
+</XML_DIZ_INFO>
