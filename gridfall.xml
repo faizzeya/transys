@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XML_DIZ_INFO>
+	<MASTER_PAD_VERSION_INFO>
+		<MASTER_PAD_VERSION>4.0</MASTER_PAD_VERSION>
+		<MASTER_PAD_EDITOR>Hand-edited, PAD 4.0 layout</MASTER_PAD_EDITOR>
+		<MASTER_PAD_INFO>Portable Application Description, or PAD for short, is a data set that is used by shareware authors to disseminate information to anyone interested in their software products. To find out more go to http://pad.asp-software.org</MASTER_PAD_INFO>
+	</MASTER_PAD_VERSION_INFO>
+	<Company_Info>
+		<Company_Name>Transys</Company_Name>
+		<Address_1></Address_1>
+		<Address_2></Address_2>
+		<City_Town></City_Town>
+		<State_Province></State_Province>
+		<Zip_Postal_Code></Zip_Postal_Code>
+		<Country>Pakistan</Country>
+		<Company_WebSite_URL>https://faizzeya.github.io/transys/</Company_WebSite_URL>
+		<Contact_Info>
+			<Author_First_Name>Faiz ul Haque</Author_First_Name>
+			<Author_Last_Name>Zeya</Author_Last_Name>
+			<Author_Email>faizulhaquezeya@gmail.com</Author_Email>
+			<Contact_First_Name>Faiz ul Haque</Contact_First_Name>
+			<Contact_Last_Name>Zeya</Contact_Last_Name>
+			<Contact_Email>faizulhaquezeya@gmail.com</Contact_Email>
+		</Contact_Info>
+		<Support_Info>
+			<Sales_Email>faizulhaquezeya@gmail.com</Sales_Email>
+			<Support_Email>faizulhaquezeya@gmail.com</Support_Email>
+			<General_Email>faizulhaquezeya@gmail.com</General_Email>
+			<Sales_Phone></Sales_Phone>
+			<Support_Phone></Support_Phone>
+			<General_Phone></General_Phone>
+			<Fax_Phone></Fax_Phone>
+		</Support_Info>
+	</Company_Info>
+	<Program_Info>
+		<Program_Name>GridFall</Program_Name>
+		<Program_Version>1.0</Program_Version>
+		<Program_Release_Month>10</Program_Release_Month>
+		<Program_Release_Day>05</Program_Release_Day>
+		<Program_Release_Year>2026</Program_Release_Year>
+		<Program_Cost_Dollars>0</Program_Cost_Dollars>
+		<Program_Cost_Other_Code></Program_Cost_Other_Code>
+		<Program_Cost_Other></Program_Cost_Other>
+		<Program_Type>Freeware</Program_Type>
+		<Program_Release_Status>New Release</Program_Release_Status>
+		<Program_Install_Support>No Install Support</Program_Install_Support>
+		<Program_OS_Support>Windows 10,Windows 11</Program_OS_Support>
+		<Program_Language>English</Program_Language>
+		<Program_Change_Info>First release</Program_Change_Info>
+		<Program_Specific_Category>Games</Program_Specific_Category>
+		<Program_Category_Class>Games &amp; Entertainment::Puzzle &amp; Word Games</Program_Category_Class>
+		<Program_System_Requirements>Windows 10 or 11. Uses .NET Framework 4.7.2 or later, which is included with Windows.</Program_System_Requirements>
+		<File_Info>
+			<File_Size_Bytes>62819</File_Size_Bytes>
+			<File_Size_K>61</File_Size_K>
+			<File_Size_MB>0.06</File_Size_MB>
+		</File_Info>
+		<Expire_Info>
+			<Has_Expire_Info>N</Has_Expire_Info>
+			<Expire_Count></Expire_Count>
+			<Expire_Based_On>Days</Expire_Based_On>
+			<Expire_Other_Info></Expire_Other_Info>
+			<Expire_Month></Expire_Month>
+			<Expire_Day></Expire_Day>
+			<Expire_Year></Expire_Year>
+		</Expire_Info>
+	</Program_Info>
+	<Program_Descriptions>
+		<English>
+			<Keywords>falling blocks, block puzzle, puzzle game, arcade puzzle, line clear, freeware game, GridFall</Keywords>
+			<Char_Desc_45>Falling-block puzzle game with five modes</Char_Desc_45>
+			<Char_Desc_80>Free falling-block puzzle with five modes, hold piece, combos and high scores.</Char_Desc_80>
+			<Char_Desc_250>GridFall is a free falling-block puzzle game for Windows. Fit the pieces together, clear rows and chase high scores across five modes: Marathon, Sprint, Ultra, Survival and Master. A single small .exe with nothing to install.</Char_Desc_250>
+			<Char_Desc_450>GridFall is a free falling-block puzzle game for Windows. Fit the falling pieces together to complete rows and score points across five modes: endless Marathon, 40-line Sprint, three-minute Ultra, Survival with rising garbage rows, and Master, where pieces land instantly. It has a hold piece, five-piece preview, ghost piece, combos, high-score tables and three colour themes. One small .exe, nothing to install.</Char_Desc_450>
+			<Char_Desc_2000>GridFall is a free falling-block puzzle game for Windows 10 and 11. Fit the falling pieces together to fill complete rows; full rows vanish and score points, and the game ends when the stack reaches the top. It is quick to pick up, with enough depth to keep experienced players busy.
+
+Five game modes:
+- Marathon: endless play. The pieces fall faster every 10 lines, and you can choose a starting level from 1 to 15.
+- Sprint: clear 40 lines as fast as you can. The clock is the only score.
+- Ultra: three minutes to score as many points as possible.
+- Survival: garbage rows push up from below, faster and faster. Every line you clear cancels one.
+- Master: for experts. Pieces land instantly and the time to place them keeps shrinking. Clear 200 lines to finish.
+
+Features:
+- Hold piece, five-piece preview and a ghost outline that shows where the piece will land.
+- Wall kicks, 180-degree rotation, T-spins, combos, back-to-back bonuses and perfect-clear bonuses.
+- Separate high-score table for every mode, with name entry.
+- Three colour themes, optional grid lines, particle effects and screen shake.
+- Adjustable key-repeat delay and rate for players who like fast, precise control.
+- Full screen or resizable window, sharp at any size. Menus work with keyboard or mouse.
+- Built-in sound effects with volume control.
+
+GridFall is a single small program file. There is no installer, it needs no extra downloads, and it writes nothing to the registry: just unzip and run. Settings and high scores are kept in your user profile. It is completely free, with no adverts, no time limit and no locked features.</Char_Desc_2000>
+		</English>
+	</Program_Descriptions>
+	<Web_Info>
+		<Application_URLs>
+			<Application_Info_URL>https://faizzeya.github.io/transys/</Application_Info_URL>
+			<Application_Order_URL></Application_Order_URL>
+			<Application_Screenshot_URL>https://faizzeya.github.io/transys/gridfall-preview.png</Application_Screenshot_URL>
+			<Application_Icon_URL></Application_Icon_URL>
+			<Application_XML_File_URL>https://faizzeya.github.io/transys/gridfall_pad.xml</Application_XML_File_URL>
+		</Application_URLs>
+		<Download_URLs>
+			<Primary_Download_URL>https://faizzeya.github.io/transys/Grid.zip</Primary_Download_URL>
+			<Secondary_Download_URL></Secondary_Download_URL>
+			<Additional_Download_URL_1></Additional_Download_URL_1>
+			<Additional_Download_URL_2></Additional_Download_URL_2>
+		</Download_URLs>
+	</Web_Info>
+	<Permissions>
+		<Distribution_Permissions>GridFall is freeware. It may be freely distributed over the internet and on physical media, provided it is distributed unmodified and complete, including its licence file, and no fee is charged for the software itself beyond a reasonable cost of the distribution medium.</Distribution_Permissions>
+		<EULA>GridFall - Freeware Licence
+Copyright (c) 2026 Transys. All rights reserved.
+
+This software is freeware. You may use it free of charge, for any length of
+time, on any number of computers.
+
+You may copy and redistribute the software, including on download sites and
+on physical media, provided that:
+  1. it is distributed unmodified and complete, including this licence;
+  2. no fee is charged for the software itself, beyond a reasonable cost of
+     the distribution medium.
+
+You may not sell, rent or lease the software, or modify, decompile or
+reverse-engineer it, except where the law expressly permits.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY AND
+FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT SHALL THE AUTHOR OR COPYRIGHT
+HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY ARISING FROM THE
+USE OF THE SOFTWARE.</EULA>
+	</Permissions>
+	<ASP>
+		<ASP_FORM>Y</ASP_FORM>
+		<ASP_Member>N</ASP_Member>
+		<ASP_Member_Number></ASP_Member_Number>
+	</ASP>
+</XML_DIZ_INFO>
