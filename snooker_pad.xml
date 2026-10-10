@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XML_DIZ_INFO>
+  <MASTER_PAD_VERSION_INFO>
+    <MASTER_PAD_VERSION>4.00</MASTER_PAD_VERSION>
+    <MASTER_PAD_EDITOR>Hand-written PAD file</MASTER_PAD_EDITOR>
+    <MASTER_PAD_INFO>Portable Application Description, or PAD for short, is a data set that is used by shareware authors to disseminate information to anyone interested in their software products. To find out more go to http://pad.asp-software.org</MASTER_PAD_INFO>
+  </MASTER_PAD_VERSION_INFO>
+  <Company_Info>
+    <Company_Name>Transys</Company_Name>
+    <Address_1></Address_1>
+    <Address_2></Address_2>
+    <City_Town>Karachi</City_Town>
+    <State_Province>Sindh</State_Province>
+    <Zip_Postal_Code></Zip_Postal_Code>
+    <Country>Pakistan</Country>
+    <Company_WebSite_URL>https://faizzeya.github.io/transys/</Company_WebSite_URL>
+    <Contact_Info>
+      <Author_First_Name>Faiz ul Haque</Author_First_Name>
+      <Author_Last_Name>Zeya</Author_Last_Name>
+      <Author_Email>faizulhaquezeya@gmail.com</Author_Email>
+      <Contact_First_Name>Faiz ul Haque</Contact_First_Name>
+      <Contact_Last_Name>Zeya</Contact_Last_Name>
+      <Contact_Email>faizulhaquezeya@gmail.com</Contact_Email>
+    </Contact_Info>
+    <Support_Info>
+      <Sales_Email>faizulhaquezeya@gmail.com</Sales_Email>
+      <Support_Email>faizulhaquezeya@gmail.com</Support_Email>
+      <General_Email>faizulhaquezeya@gmail.com</General_Email>
+      <Sales_Phone></Sales_Phone>
+      <Support_Phone></Support_Phone>
+      <General_Phone></General_Phone>
+      <Fax_Phone></Fax_Phone>
+    </Support_Info>
+  </Company_Info>
+  <Program_Info>
+    <Program_Name>Snooker Pro</Program_Name>
+    <Program_Version>1.0</Program_Version>
+    <Program_Release_Month>10</Program_Release_Month>
+    <Program_Release_Day>10</Program_Release_Day>
+    <Program_Release_Year>2026</Program_Release_Year>
+    <Program_Cost_Dollar>0.00</Program_Cost_Dollar>
+    <Program_Cost_Other_Code>USD</Program_Cost_Other_Code>
+    <Program_Cost_Other>0.00</Program_Cost_Other>
+    <Program_Type>Freeware</Program_Type>
+    <Program_Release_Status>New Release</Program_Release_Status>
+    <Program_Install_Support>No Install Support</Program_Install_Support>
+    <Program_OS_Support>Win7 x64,Win8,Win10,Win11</Program_OS_Support>
+    <Program_Language>English</Program_Language>
+    <Program_Change_Info>First public release.</Program_Change_Info>
+    <Program_Specific_Category>Games</Program_Specific_Category>
+    <Program_Category_Class>Games::Sports</Program_Category_Class>
+    <Program_System_Requirements>Windows 7 SP1 (with Universal C Runtime update), 8.1, 10 or 11, 64-bit; 1100x740 or larger display; sound card optional</Program_System_Requirements>
+    <File_Info>
+      <File_Size_Bytes>180541</File_Size_Bytes>
+      <File_Size_K>176.31</File_Size_K>
+      <File_Size_MB>0.17</File_Size_MB>
+    </File_Info>
+    <Expire_Info>
+      <Has_Expire_Info>N</Has_Expire_Info>
+      <Expire_Count></Expire_Count>
+      <Expire_Based_On>Days</Expire_Based_On>
+      <Expire_Other_Info></Expire_Other_Info>
+      <Expire_Month></Expire_Month>
+      <Expire_Day></Expire_Day>
+      <Expire_Year></Expire_Year>
+    </Expire_Info>
+  </Program_Info>
+  <Program_Descriptions>
+    <English>
+      <Keywords>snooker, snooker game, free snooker, billiards, cue sports, pool, snooker vs computer, two player snooker, sports game, Transys</Keywords>
+      <Char_Desc_45>Free full-size snooker game with CPU opponent</Char_Desc_45>
+      <Char_Desc_80>Free full-size snooker game for Windows with spin physics and a CPU opponent.</Char_Desc_80>
+      <Char_Desc_250>Free snooker game for Windows: full-size table, 15 reds and 6 colours, spin physics, official scoring and fouls, and a computer opponent. Made by Transys, Pakistan, with CEO/VP Faiz ul Haque Zeya.</Char_Desc_250>
+      <Char_Desc_450>Snooker Pro is a free snooker game for Windows. Play a full frame on a full-size table with 15 reds and 6 colours, realistic ball physics with top, back and side spin, an aim guide, official scoring and fouls, and cue-ball-in-hand in the D. Challenge the computer opponent on Easy, Medium or Hard, or play against a friend on the same PC. The game is made by Transys, Pakistan, with CEO/VP Faiz ul Haque Zeya.</Char_Desc_450>
+      <Char_Desc_2000>Snooker Pro is a free snooker game for Windows that brings the full game to your desktop. Play frames on a full-size table with 15 reds and 6 colours, six pockets, and realistic ball physics including top spin, back spin and side spin. A smooth shaded 2D table, cue stick animation, power meter, aim guide and sound effects make every shot easy to read.
+
+Features:
+- Official snooker scoring: pot a red then a colour, then the colours in order from yellow to black
+- Fouls detected automatically: cue ball potted, no ball hit, wrong ball hit first, wrong ball potted (minimum 4 points to the opponent)
+- Colours respotted correctly; cue ball in hand in the D after a foul
+- Play against the computer on Easy, Medium or Hard, or play a friend on the same computer
+- Spin control: drag a dot on the spin ball for follow, screw back and side spin; fine aim with Shift or the arrow keys
+- Scoreboard with current break, frames won and best break; concede option and in-game help
+- Single small executable, no installation, no extra runtime files
+
+Controls: aim with the mouse, hold the left mouse button (or Space) to charge power and release to shoot.
+
+Snooker Pro is made by Transys, Pakistan, with CEO/VP Faiz ul Haque Zeya.</Char_Desc_2000>
+    </English>
+  </Program_Descriptions>
+  <Web_Info>
+    <Application_URLs>
+      <Application_Info_URL>https://faizzeya.github.io/transys/</Application_Info_URL>
+      <Application_Order_URL></Application_Order_URL>
+      <Application_Screenshot_URL>https://faizzeya.github.io/transys/snooker.jpg</Application_Screenshot_URL>
+      <Application_Icon_URL></Application_Icon_URL>
+      <Application_XML_File_URL>https://faizzeya.github.io/transys/snooker_pad.xml</Application_XML_File_URL>
+    </Application_URLs>
+    <Download_URLs>
+      <Primary_Download_URL>https://faizzeya.github.io/transys/Snooker20.zip</Primary_Download_URL>
+      <Secondary_Download_URL></Secondary_Download_URL>
+      <Additional_Download_URL_1></Additional_Download_URL_1>
+      <Additional_Download_URL_2></Additional_Download_URL_2>
+    </Download_URLs>
+  </Web_Info>
+  <Permissions>
+    <Distribution_Permissions>Snooker Pro is freeware. It may be freely distributed in its original, unmodified form, including download sites and CD/DVD compilations, provided the archive is not altered and credit to Transys, Pakistan is kept.</Distribution_Permissions>
+    <EULA></EULA>
+  </Permissions>
+</XML_DIZ_INFO>
