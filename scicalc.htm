@@ -1,0 +1,877 @@
+<title>Quadrant Graphing Calculator</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Martian+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: an instrument bench — keyed calculator with an LCD readout on the left, plotting sheet on the right; stacked with tabs on phones. */
+:root{
+  --bg:#E8ECF0; --panel:#F7F9FA; --panel-2:#EDF1F4; --ink:#16202A; --muted:#5A6774; --line:#D2D9E0;
+  --key:#FFFFFF; --key-ink:#16202A; --key-edge:#C9D1D9; --key-fn:#E3E9EE; --key-op:#D3DDE7;
+  --shift:#C26A1C; --shift-ink:#FFFFFF; --accent:#1E5A96; --accent-ink:#FFFFFF; --err:#B3261E;
+  --lcd:#D5DECF; --lcd-ink:#18251B; --lcd-dim:#6E7F6C;
+  --plot:#FCFDFD; --grid-minor:#EEF1F4; --grid-major:#DCE2E8; --axis:#6A7682;
+  --f1:#1E5A96; --f2:#C0402B; --f3:#2B8653; --f4:#8649BC; --f5:#C26A1C; --f6:#148686;
+  --ui:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --lcdfont:"Martian Mono", "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0E1216; --panel:#161B21; --panel-2:#1C222A; --ink:#E3E8ED; --muted:#8D99A5; --line:#29313A;
+  --key:#232A33; --key-ink:#E3E8ED; --key-edge:#323B46; --key-fn:#1C232B; --key-op:#28323D;
+  --shift:#E6954A; --shift-ink:#1A1007; --accent:#5E9BD6; --accent-ink:#08131E; --err:#F2867B;
+  --lcd:#131A15; --lcd-ink:#CBE2C1; --lcd-dim:#6F8569;
+  --plot:#11161B; --grid-minor:#182027; --grid-major:#253039; --axis:#7C8995;
+  --f1:#6EA8E0; --f2:#EE7A63; --f3:#5BC189; --f4:#B48AE8; --f5:#EFA45C; --f6:#4CC3C3;
+  color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0E1216; --panel:#161B21; --panel-2:#1C222A; --ink:#E3E8ED; --muted:#8D99A5; --line:#29313A;
+  --key:#232A33; --key-ink:#E3E8ED; --key-edge:#323B46; --key-fn:#1C232B; --key-op:#28323D;
+  --shift:#E6954A; --shift-ink:#1A1007; --accent:#5E9BD6; --accent-ink:#08131E; --err:#F2867B;
+  --lcd:#131A15; --lcd-ink:#CBE2C1; --lcd-dim:#6F8569;
+  --plot:#11161B; --grid-minor:#182027; --grid-major:#253039; --axis:#7C8995;
+  --f1:#6EA8E0; --f2:#EE7A63; --f3:#5BC189; --f4:#B48AE8; --f5:#EFA45C; --f6:#4CC3C3;
+  color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); font-family:var(--ui); font-size:14px; line-height:1.45}
+button,input{font:inherit; color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+.app{max-width:1360px; margin:0 auto; padding-block:18px 32px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px));
+  display:flex; flex-direction:column; gap:16px}
+.top{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.brand{display:flex; align-items:center; gap:10px; min-width:0}
+.brand svg{flex:none; color:var(--accent)}
+.brand h1{margin:0; font-family:var(--lcdfont); font-weight:500; font-size:19px; letter-spacing:-.01em}
+.brand p{margin:0; color:var(--muted); font-size:13px}
+.tabs{display:none; background:var(--panel-2); border:1px solid var(--line); border-radius:10px; padding:3px; gap:3px}
+.tabs button{border:0; background:transparent; padding:7px 16px; border-radius:7px; font-weight:500; color:var(--muted)}
+.tabs button[aria-selected="true"]{background:var(--panel); color:var(--ink); box-shadow:0 1px 2px rgb(0 0 0 / .12)}
+
+.layout{display:grid; grid-template-columns:minmax(320px, 392px) minmax(0, 1fr); gap:18px; align-items:start}
+.card{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px; min-width:0}
+h2{margin:0; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:var(--muted)}
+h3{margin:0; font-size:12px; font-weight:600; color:var(--muted)}
+
+/* calculator */
+.calc{display:flex; flex-direction:column; gap:12px}
+.lcd{background:var(--lcd); color:var(--lcd-ink); border-radius:9px; padding:10px 12px 12px;
+  box-shadow:inset 0 2px 5px rgb(0 0 0 / .18); display:flex; flex-direction:column; gap:4px}
+.ann{display:flex; gap:12px; font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; font-weight:500}
+.ann span{opacity:.18; transition:opacity .12s}
+.ann span.on{opacity:1}
+.ann .sp{flex:1}
+#expr{width:100%; background:transparent; border:0; text-align:right; font-family:var(--lcdfont); font-size:15px;
+  color:var(--lcd-ink); padding:4px 0; outline:none}
+#expr::placeholder{color:var(--lcd-dim)}
+.result{font-family:var(--lcdfont); font-size:26px; text-align:right; min-height:38px; overflow-wrap:anywhere; line-height:1.3}
+.result.preview{color:var(--lcd-dim); font-size:20px}
+.result.error{color:var(--err); font-size:14px; font-family:var(--ui); font-weight:500; padding-top:6px}
+
+.keypad{display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); gap:6px}
+.k{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; min-height:50px; padding:4px 2px;
+  background:var(--key); color:var(--key-ink); border:1px solid var(--key-edge); border-bottom-width:3px; border-radius:8px;
+  font-weight:500; font-size:15px; user-select:none; -webkit-user-select:none; touch-action:manipulation}
+.k:active{transform:translateY(1px); border-bottom-width:2px}
+.k .sec{font-size:10px; line-height:1; min-height:11px; color:var(--shift); font-weight:500; padding:1px 3px; border-radius:3px; white-space:nowrap}
+.k .main{line-height:1.1; white-space:nowrap}
+.k.fn{background:var(--key-fn)}
+.k.op{background:var(--key-op); font-size:19px}
+.k.shift{background:var(--shift); color:var(--shift-ink); border-color:var(--shift)}
+.k.shift.on{box-shadow:0 0 0 2px var(--panel), 0 0 0 4px var(--shift)}
+.k.toggle.on{box-shadow:inset 0 0 0 2px var(--accent)}
+.k.eq{background:var(--accent); color:var(--accent-ink); border-color:var(--accent); font-size:21px}
+.k.clr .main{color:var(--err)}
+.keypad.shifted .k .sec:not(:empty){background:var(--shift); color:var(--shift-ink)}
+.keypad.shifted .k:not(.shift) .main{opacity:.45}
+
+.hist-head{display:flex; align-items:center; justify-content:space-between}
+.link{border:0; background:none; color:var(--accent); font-size:13px; padding:2px 4px}
+#hist{list-style:none; margin:8px 0 0; padding:0; max-height:210px; overflow:auto; display:flex; flex-direction:column}
+#hist li{display:flex; flex-direction:column; align-items:flex-end; gap:1px; padding:7px 4px; border-top:1px solid var(--line)}
+#hist li:first-child{border-top:0}
+#hist button{border:0; background:none; padding:0; text-align:right; max-width:100%; overflow-wrap:anywhere}
+#hist .he{color:var(--muted); font-family:var(--mono); font-size:12.5px}
+#hist .hr{font-family:var(--lcdfont); font-size:14px}
+#hist button:hover{color:var(--accent)}
+.empty{color:var(--muted); font-size:13px; padding:8px 0}
+.chips{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px}
+.chip{border:1px solid var(--line); background:var(--panel-2); border-radius:999px; padding:4px 10px; font-family:var(--mono); font-size:12px}
+.chip:hover{border-color:var(--accent)}
+
+/* graph */
+.graph{display:flex; flex-direction:column; gap:12px}
+.gbar{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap}
+.readout{font-family:var(--mono); font-size:12.5px; color:var(--muted); display:flex; flex-wrap:wrap; gap:4px 14px; min-height:20px; min-width:0}
+.readout b{font-weight:500}
+.gbtns{display:flex; gap:6px}
+.gb{border:1px solid var(--line); background:var(--panel-2); border-radius:8px; height:34px; min-width:36px; padding:0 10px; font-weight:500}
+.gb:hover{border-color:var(--accent)}
+.plotwrap{position:relative; height:clamp(320px, 60vh, 640px); border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--plot)}
+#plot{display:block; width:100%; height:100%; touch-action:none; cursor:crosshair}
+#plot.dragging{cursor:grabbing}
+
+.lower{display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:16px}
+.sec-head{display:flex; align-items:baseline; justify-content:space-between; gap:8px; margin-bottom:8px}
+.hint{color:var(--muted); font-size:12px}
+#fnList{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px}
+.fn{display:grid; grid-template-columns:auto auto minmax(0,1fr) auto; align-items:center; gap:8px; padding:6px 8px;
+  border:1px solid var(--line); border-radius:9px; background:var(--panel)}
+.fn.active{border-color:var(--c); background:var(--panel-2)}
+.sw{width:20px; height:20px; border-radius:50%; border:2.5px solid var(--c); background:var(--c); padding:0}
+.sw.off{background:transparent}
+.fname{font-family:var(--mono); font-size:13px; color:var(--c); white-space:nowrap}
+.fn input{min-width:0; width:100%; border:0; background:transparent; font-family:var(--mono); font-size:14px; padding:6px 2px; outline:none}
+.fdel{border:0; background:none; color:var(--muted); font-size:18px; width:28px; height:28px; border-radius:6px}
+.fdel:hover{color:var(--err); background:var(--panel-2)}
+.ferr{grid-column:3 / 5; color:var(--err); font-size:12px}
+#addFn{margin-top:8px; border:1px dashed var(--line); background:none; border-radius:9px; padding:8px; width:100%; color:var(--accent); font-weight:500}
+#addFn:disabled{color:var(--muted); cursor:default}
+
+.analysis{border:1px solid var(--line); border-radius:10px; padding:12px; display:flex; flex-direction:column; gap:10px; background:var(--panel-2); min-width:0}
+.analysis .sec-head{margin:0}
+.arow{display:flex; flex-direction:column; gap:3px}
+.mono{font-family:var(--mono); font-size:13px; overflow-wrap:anywhere}
+.out{font-family:var(--mono); font-size:13px; color:var(--ink)}
+.fieldrow{display:flex; align-items:center; gap:6px; flex-wrap:wrap; font-size:13px; color:var(--muted)}
+.fieldrow input[type=text]{width:78px; border:1px solid var(--line); background:var(--panel); border-radius:6px; padding:4px 7px; font-family:var(--mono); font-size:13px}
+.check{display:flex; align-items:center; gap:7px; font-size:13px; color:var(--muted); cursor:pointer}
+.check input{accent-color:var(--accent)}
+.pts{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.pts ul{list-style:none; margin:4px 0 0; padding:0; font-family:var(--mono); font-size:12.5px; font-variant-numeric:tabular-nums; display:flex; flex-direction:column; gap:2px}
+.pts li span{color:var(--muted)}
+.tag{display:inline-block; font-family:var(--ui); font-size:10.5px; letter-spacing:.04em; text-transform:uppercase; padding:0 5px; border-radius:4px; border:1px solid var(--line); color:var(--muted); margin-left:4px}
+
+@media (max-width: 920px){
+  .tabs{display:flex}
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .layout[data-view="calc"] #graph{display:none}
+  .layout[data-view="graph"] #calc{display:none}
+}
+@media (max-width: 680px){ .lower{grid-template-columns:minmax(0,1fr)} .brand p{display:none} }
+@media (max-width: 380px){ .k{min-height:46px; font-size:14px} .k .sec{font-size:9px} }
+@media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+</style>
+
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M3 15h24M15 3v24" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".45" fill="none"/><path d="M4 23c4-1 6-14 11-8s7 3 11-9" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>
+      <div><h1>Quadrant</h1><p>Scientific calculator and function plotter</p></div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="View">
+      <button type="button" role="tab" id="tab-calc" aria-selected="true">Calculator</button>
+      <button type="button" role="tab" id="tab-graph" aria-selected="false">Graph</button>
+    </div>
+  </header>
+
+  <main class="layout" id="layout" data-view="calc">
+    <section class="card calc" id="calc" aria-label="Calculator">
+      <div class="lcd">
+        <div class="ann" aria-live="polite"><span id="a-shift">2ND</span><span id="a-hyp">HYP</span><span id="a-mem">M</span><span class="sp"></span><span id="a-deg">DEG</span><span id="a-rad" class="on">RAD</span></div>
+        <input id="expr" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type or tap an expression" aria-label="Expression">
+        <div class="result" id="result" aria-live="polite">0</div>
+      </div>
+      <div class="keypad" id="keypad"></div>
+      <div>
+        <div class="hist-head"><h2>History</h2><button type="button" class="link" id="clearHist">Clear</button></div>
+        <ol id="hist"></ol>
+      </div>
+      <div>
+        <h2>Try</h2>
+        <div class="chips" id="chips"></div>
+      </div>
+    </section>
+
+    <section class="card graph" id="graph" aria-label="Graph">
+      <div class="gbar">
+        <div class="readout" id="readout">Drag to pan · scroll or pinch to zoom</div>
+        <div class="gbtns">
+          <button type="button" class="gb" id="zOut" aria-label="Zoom out">−</button>
+          <button type="button" class="gb" id="zIn" aria-label="Zoom in">+</button>
+          <button type="button" class="gb" id="fitY">Fit y</button>
+          <button type="button" class="gb" id="resetV">Reset</button>
+        </div>
+      </div>
+      <div class="plotwrap"><canvas id="plot" aria-label="Function plot"></canvas></div>
+      <div class="lower">
+        <div>
+          <div class="sec-head"><h2>Functions</h2><span class="hint">y = f(x), angles in radians</span></div>
+          <ul id="fnList"></ul>
+          <button type="button" id="addFn">+ Add function</button>
+        </div>
+        <div class="analysis" id="analysis">
+          <div class="sec-head"><h2>Analysis</h2><span class="mono" id="an-name"></span></div>
+          <div class="arow"><h3>Derivative f′(x)</h3><div class="mono" id="an-deriv">—</div>
+            <label class="check"><input type="checkbox" id="an-plotd"> Plot f′(x) as a dashed line</label></div>
+          <div class="arow"><div class="fieldrow"><label for="an-x">Value at x =</label><input type="text" id="an-x" value="1"></div><div class="out" id="an-xout"></div></div>
+          <div class="arow"><div class="fieldrow"><span>∫ from</span><input type="text" id="an-a" value="0" aria-label="Lower limit"><span>to</span><input type="text" id="an-b" value="π" aria-label="Upper limit"></div><div class="out" id="an-int"></div>
+            <label class="check"><input type="checkbox" id="an-shade" checked> Shade the area</label></div>
+          <div class="pts">
+            <div><h3>Roots in view</h3><ul id="an-roots"></ul></div>
+            <div><h3>Turning points in view</h3><ul id="an-ext"></ul></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.min.js"></script>
+<script>
+(() => {
+const $ = s => document.querySelector(s);
+const store = {
+  get(k, d){ try { const v = localStorage.getItem('quadrant.' + k); return v ? JSON.parse(v) : d; } catch { return d; } },
+  set(k, v){ try { localStorage.setItem('quadrant.' + k, JSON.stringify(v)); } catch {} }
+};
+
+/* ---------- math setup ---------- */
+const G = math.create(math.all);   // graphing: always radians
+const C = math.create(math.all);   // calculator: respects DEG/RAD
+let deg = store.get('deg', false);
+for (const m of [G, C]) m.import({
+  nCr: (n, k) => m.combinations(n, k),
+  nPr: (n, k) => m.permutations(n, k),
+  rand: () => Math.random()
+}, { override: true });
+(() => {
+  const rep = {};
+  for (const n of ['sin','cos','tan','sec','csc','cot']) {
+    const fn = C[n];
+    const f = x => fn(deg ? x * Math.PI / 180 : x);
+    rep[n] = C.typed(n, { 'number': f, 'Complex': x => fn(x), 'Array | Matrix': x => C.map(x, f) });
+  }
+  for (const n of ['asin','acos','atan','asec','acsc','acot']) {
+    const fn = C[n];
+    const f = x => { const r = fn(x); return deg && typeof r === 'number' ? r * 180 / Math.PI : r; };
+    rep[n] = C.typed(n, { 'number': f, 'Complex': x => fn(x), 'Array | Matrix': x => C.map(x, f) });
+  }
+  C.import(rep, { override: true });
+})();
+
+// Calculator-style notation -> math.js syntax.
+function fixLog(s){
+  const re = /(?<![A-Za-z_])log\(/g; let out = '', last = 0, m;
+  while ((m = re.exec(s))) {
+    const start = m.index + 4; let depth = 1, comma = false;
+    for (let j = start; j < s.length && depth > 0; j++) {
+      const c = s[j];
+      if (c === '(' || c === '[') depth++;
+      else if (c === ')' || c === ']') depth--;
+      else if (c === ',' && depth === 1) comma = true;
+    }
+    out += s.slice(last, m.index) + (comma ? 'log(' : 'log10(');
+    last = start;
+  }
+  return out + s.slice(last);
+}
+function prep(s){
+  s = s.replace(/×|·/g, '*').replace(/÷/g, '/').replace(/[−–]/g, '-')
+       .replace(/π/g, 'pi').replace(/√/g, 'sqrt').replace(/∛/g, 'cbrt')
+       .replace(/²/g, '^2').replace(/³/g, '^3').replace(/⁻¹/g, '^(-1)');
+  s = s.replace(/(\d+(?:\.\d+)?)%(?![\w(])/g, '($1/100)');
+  s = s.replace(/(\d)e(?!\d)/g, '$1*e');
+  s = fixLog(s);
+  s = s.replace(/(?<![A-Za-z_])ln\(/g, 'log(');
+  return s;
+}
+const SUP = { '0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','-':'⁻','+':'' };
+function pretty(str){
+  return str.replace(/(-?\d+(?:\.\d+)?)e([+-]\d+)/g, (_, a, b) => `${a}×10${[...b].map(c => SUP[c]).join('')}`)
+            .replace(/(^|[\s(\[,])-/g, '$1−');
+}
+function fmtRaw(r, precision = 12){
+  if (r === undefined || r === null) return '';
+  if (typeof r === 'function') return 'function defined';
+  if (r && r.isResultSet) r = r.entries[r.entries.length - 1];
+  if (typeof r === 'number' && !isFinite(r)) return isNaN(r) ? 'Undefined' : (r > 0 ? 'Infinity' : '-Infinity');
+  return C.format(r, { precision, lowerExp: -9, upperExp: 15 });
+}
+function friendly(msg){
+  let m;
+  if ((m = /Undefined symbol (\S+)/.exec(msg))) return `Unknown name “${m[1]}”`;
+  if ((m = /Undefined function (\S+)/.exec(msg))) return `Unknown function “${m[1]}”`;
+  if (/Parenthesis \) expected/.test(msg)) return 'Missing closing parenthesis';
+  if (/Unexpected end of expression/.test(msg)) return 'The expression is incomplete';
+  return msg.replace(/\(char \d+\)/, '').trim();
+}
+
+/* ---------- calculator ---------- */
+const exprEl = $('#expr'), resEl = $('#result');
+const scope = { Ans: 0, M: 0 };
+let shift = false, hyp = false, justEval = false, mem = null, caret = 0;
+const fine = matchMedia('(pointer: fine)').matches;
+
+const KEYS = [
+  { m:['2nd','@shift'], c:'shift', id:'k-shift' },
+  { m:['RAD','@angle'], c:'fn', id:'k-angle' },
+  { m:['hyp','@hyp'], c:'fn toggle', id:'k-hyp' },
+  { m:['M+','@mplus'], s:['M−','@mminus'], c:'fn' },
+  { m:['MR','@mr'], s:['MC','@mc'], c:'fn' },
+
+  { m:['sin','sin('], s:['sin⁻¹','asin('], h:['sinh','sinh('], hs:['sinh⁻¹','asinh('], c:'fn' },
+  { m:['cos','cos('], s:['cos⁻¹','acos('], h:['cosh','cosh('], hs:['cosh⁻¹','acosh('], c:'fn' },
+  { m:['tan','tan('], s:['tan⁻¹','atan('], h:['tanh','tanh('], hs:['tanh⁻¹','atanh('], c:'fn' },
+  { m:['ln','ln('], s:['eˣ','e^('], c:'fn' },
+  { m:['log','log('], s:['10ˣ','10^('], c:'fn' },
+
+  { m:['x²','²'], s:['x³','³'], c:'fn' },
+  { m:['xʸ','^'], s:['ʸ√x','nthRoot('], c:'fn' },
+  { m:['√','√('], s:['∛','∛('], c:'fn' },
+  { m:['x⁻¹','⁻¹'], s:['|x|','abs('], c:'fn' },
+  { m:['n!','!'], s:['nCr','nCr('], c:'fn' },
+
+  { m:['π','π'], s:['rand','rand()'], c:'fn' },
+  { m:['e','e'], s:['nPr','nPr('], c:'fn' },
+  { m:['(','('], s:['⌊x⌋','floor('], c:'fn' },
+  { m:[')',')'], s:['⌈x⌉','ceil('], c:'fn' },
+  { m:['%','%'], s:['mod',' mod '], c:'fn' },
+
+  { m:['7','7'] }, { m:['8','8'] }, { m:['9','9'] },
+  { m:['⌫','@del'], c:'op' }, { m:['AC','@ac'], c:'op clr' },
+  { m:['4','4'] }, { m:['5','5'] }, { m:['6','6'] },
+  { m:['×','×'], c:'op' }, { m:['÷','÷'], c:'op' },
+  { m:['1','1'] }, { m:['2','2'] }, { m:['3','3'] },
+  { m:['+','+'], c:'op' }, { m:['−','−'], c:'op' },
+  { m:['0','0'] }, { m:['.','.'], s:[',',','] }, { m:['EE','E'], s:['x10ʸ','*10^('] },
+  { m:['Ans','Ans'], c:'op' }, { m:['=','@eq'], c:'eq' }
+];
+const kp = $('#keypad');
+KEYS.forEach((k, i) => {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'k ' + (k.c || ''); b.id = k.id || ('key-' + i);
+  b.innerHTML = `<span class="sec"></span><span class="main"></span>`;
+  b.addEventListener('click', () => press(k));
+  kp.append(b); k.el = b;
+});
+function labelKeys(){
+  for (const k of KEYS) {
+    const main = hyp && k.h ? k.h : k.m;
+    const sec = hyp && k.hs ? k.hs : k.s;
+    k.el.querySelector('.main').textContent = k.id === 'k-angle' ? (deg ? 'DEG' : 'RAD') : main[0];
+    k.el.querySelector('.sec').textContent = sec ? sec[0] : '';
+  }
+  kp.classList.toggle('shifted', shift);
+  $('#k-shift').classList.toggle('on', shift);
+  $('#k-hyp').classList.toggle('on', hyp);
+  $('#a-shift').classList.toggle('on', shift);
+  $('#a-hyp').classList.toggle('on', hyp);
+  $('#a-mem').classList.toggle('on', mem !== null);
+  $('#a-deg').classList.toggle('on', deg);
+  $('#a-rad').classList.toggle('on', !deg);
+}
+function press(k){
+  const entry = shift && k.s ? (hyp && k.hs ? k.hs : k.s) : (hyp && k.h ? k.h : k.m);
+  const v = entry[1];
+  if (v[0] === '@') action(v.slice(1)); else insert(v);
+  if (v !== '@shift' && v !== '@hyp') { shift = false; hyp = false; }
+  labelKeys();
+}
+function syncCaret(){ caret = exprEl.selectionStart ?? exprEl.value.length; }
+['keyup','click','select','input'].forEach(ev => exprEl.addEventListener(ev, syncCaret));
+function setExpr(v){ exprEl.value = v; caret = v.length; place(); preview(); }
+function place(){ if (fine) { exprEl.focus(); exprEl.setSelectionRange(caret, caret); } }
+function insert(str){
+  if (justEval) {
+    justEval = false;
+    setExpr(/^([+\-−×÷*/^²³!%E]|⁻¹| mod )/.test(str) ? 'Ans' + str : str);
+    return;
+  }
+  const v = exprEl.value;
+  const s = Math.min(caret, v.length), e = (document.activeElement === exprEl) ? exprEl.selectionEnd : s;
+  exprEl.value = v.slice(0, s) + str + v.slice(Math.max(s, e));
+  caret = s + str.length; place(); preview();
+}
+const TOKEN = /(asinh|acosh|atanh|asin|acos|atan|sinh|cosh|tanh|sin|cos|tan|log10|log|ln|sqrt|cbrt|nthRoot|abs|nCr|nPr|floor|ceil|√|∛|10\^|e\^)\($|rand\(\)$|Ans$| mod $|⁻¹$|\*10\^\($/;
+function action(a){
+  switch (a) {
+    case 'shift': shift = !shift; break;
+    case 'hyp': hyp = !hyp; break;
+    case 'angle': deg = !deg; store.set('deg', deg); if (!justEval) preview(); break;
+    case 'ac': justEval = false; exprEl.value = ''; caret = 0; showResult('0'); place(); break;
+    case 'del': {
+      if (justEval) { justEval = false; }
+      const v = exprEl.value, p = Math.min(caret, v.length);
+      const before = v.slice(0, p), m = before.match(TOKEN);
+      const cut = m ? m[0].length : 1;
+      exprEl.value = before.slice(0, Math.max(0, p - cut)) + v.slice(p);
+      caret = Math.max(0, p - cut); place(); preview(); break;
+    }
+    case 'eq': evaluate(); break;
+    case 'mplus': case 'mminus': {
+      const val = currentValue(); if (val === undefined) break;
+      try { mem = mem === null ? (a === 'mplus' ? val : C.unaryMinus(val)) : (a === 'mplus' ? C.add(mem, val) : C.subtract(mem, val)); scope.M = mem; }
+      catch (e) { showResult(friendly(e.message), 'error'); }
+      break;
+    }
+    case 'mr': insert('M'); break;
+    case 'mc': mem = null; scope.M = 0; break;
+  }
+}
+function currentValue(){
+  if (justEval) return scope.Ans;
+  const src = exprEl.value.trim(); if (!src) return scope.Ans;
+  try { return C.evaluate(prep(src), Object.assign({}, scope)); }
+  catch (e) { showResult(friendly(e.message), 'error'); return undefined; }
+}
+function showResult(text, cls){ resEl.textContent = text; resEl.className = 'result' + (cls ? ' ' + cls : ''); }
+function preview(){
+  const src = exprEl.value.trim();
+  if (!src) { showResult('0', 'preview'); return; }
+  if (/(^|[^=!<>])=($|[^=])/.test(src)) { showResult('', 'preview'); return; }
+  try {
+    const r = C.evaluate(prep(src), Object.assign({}, scope));
+    const t = fmtRaw(r);
+    showResult(t && typeof r !== 'function' ? '= ' + pretty(t) : '', 'preview');
+  } catch { showResult('', 'preview'); }
+}
+let hist = store.get('hist', []);
+function evaluate(){
+  const src = exprEl.value.trim(); if (!src) return;
+  try {
+    let r = C.evaluate(prep(src), scope);
+    if (r && r.isResultSet) r = r.entries[r.entries.length - 1];
+    const raw = fmtRaw(r);
+    if (r !== undefined && typeof r !== 'function') scope.Ans = r;
+    showResult(raw ? '= ' + pretty(raw) : 'Done');
+    hist.unshift({ e: src, r: raw });
+    hist = hist.slice(0, 60); store.set('hist', hist); renderHist();
+    justEval = true;
+  } catch (e) { showResult(friendly(e.message), 'error'); }
+}
+function renderHist(){
+  const ol = $('#hist'); ol.innerHTML = '';
+  if (!hist.length) { ol.innerHTML = '<li class="empty">Results appear here. Tap an expression to edit it, or a result to reuse it.</li>'; return; }
+  hist.forEach(h => {
+    const li = document.createElement('li');
+    const be = document.createElement('button'); be.type = 'button'; be.className = 'he'; be.textContent = h.e; be.title = 'Edit this expression';
+    be.onclick = () => { justEval = false; setExpr(h.e); };
+    const br = document.createElement('button'); br.type = 'button'; br.className = 'hr'; br.textContent = '= ' + pretty(h.r); br.title = 'Insert this result';
+    br.onclick = () => insert(/^[\d.]/.test(h.r) || /^-/.test(h.r) ? '(' + h.r + ')' : h.r);
+    li.append(be, br); ol.append(li);
+  });
+}
+$('#clearHist').onclick = () => { hist = []; store.set('hist', hist); renderHist(); };
+exprEl.addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); evaluate(); return; }
+  if (e.key === 'Escape') { e.preventDefault(); action('ac'); return; }
+  if (justEval && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) { e.preventDefault(); insert(e.key); labelKeys(); }
+});
+exprEl.addEventListener('input', () => { justEval = false; preview(); });
+if (!fine) exprEl.setAttribute('inputmode', 'none');
+exprEl.addEventListener('dblclick', () => exprEl.removeAttribute('inputmode'));
+
+const EXAMPLES = ['√(2)×π', '5 cm to inch', 'det([2,1;4,3])', 'sqrt(-9)', 'nCr(10,3)', 'log(8, 2)', '20!', '1.5E-3×4%'];
+EXAMPLES.forEach(x => {
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.textContent = x;
+  b.onclick = () => { justEval = false; setExpr(x); evaluate(); };
+  $('#chips').append(b);
+});
+
+/* ---------- graph ---------- */
+const canvas = $('#plot'), ctx = canvas.getContext('2d');
+let W = 0, H = 0, dpr = 1, viewInit = false;
+const view = { cx: 0, cy: 0, kx: 40, ky: 40 };
+const X = x => (x - view.cx) * view.kx + W / 2, Y = y => H / 2 - (y - view.cy) * view.ky;
+const IX = sx => (sx - W / 2) / view.kx + view.cx, IY = sy => (H / 2 - sy) / view.ky + view.cy;
+const SUB = ['₁','₂','₃','₄','₅','₆'];
+let colors = {};
+function readColors(){
+  const cs = getComputedStyle(document.documentElement), g = n => cs.getPropertyValue(n).trim();
+  colors = { plot: g('--plot'), minor: g('--grid-minor'), major: g('--grid-major'), axis: g('--axis'), muted: g('--muted'), ink: g('--ink'),
+    f: [1,2,3,4,5,6].map(i => g('--f' + i)) };
+}
+
+let fns = store.get('fns', null) || [
+  { expr: '2sin(x)', ci: 0, vis: true },
+  { expr: 'x^3/8 - x', ci: 1, vis: true },
+  { expr: '3e^(-x^2/4)', ci: 2, vis: true }
+];
+fns.forEach((f, i) => { f.id = i + 1; });
+let nextId = fns.length + 1, activeId = fns[0] ? fns[0].id : null;
+
+function toReal(v){
+  if (typeof v === 'number') return v;
+  if (v && v.isComplex) return Math.abs(v.im) < 1e-10 ? v.re : NaN;
+  if (v && (v.isBigNumber || v.isFraction)) return Number(v);
+  return NaN;
+}
+function ev(code, x){ try { return toReal(code.evaluate({ x })); } catch { return NaN; } }
+function compileFn(f){
+  f.code = null; f.dcode = null; f.dstr = ''; f.error = '';
+  const src = f.expr.replace(/^\s*(y|f\s*\(\s*x\s*\))\s*=\s*/i, '').trim();
+  if (!src) return;
+  try {
+    const node = G.parse(prep(src));
+    const code = node.compile();
+    try { code.evaluate({ x: 0.731 }); } catch (e) { if (/Undefined|Unexpected type|Too (few|many)/.test(e.message)) throw e; }
+    f.code = code;
+    try {
+      const d = G.derivative(node, 'x');
+      f.dcode = d.compile();
+      f.dstr = d.toString({ implicit: 'hide' }).replace(/(?<![A-Za-z_])log\(/g, 'ln(').replace(/ \* /g, '·').replace(/\bpi\b/g, 'π');
+    } catch { f.dstr = 'Not available for this function'; }
+  } catch (e) { f.error = friendly(e.message); }
+}
+fns.forEach(compileFn);
+const saveFns = () => store.set('fns', fns.map(f => ({ expr: f.expr, ci: f.ci, vis: f.vis })));
+const activeFn = () => fns.find(f => f.id === activeId);
+const nameOf = f => 'f' + SUB[fns.indexOf(f)];
+
+function renderFns(){
+  const ul = $('#fnList'); ul.innerHTML = '';
+  fns.forEach((f, i) => {
+    const li = document.createElement('li');
+    li.className = 'fn' + (f.id === activeId ? ' active' : '');
+    li.style.setProperty('--c', `var(--f${f.ci + 1})`);
+    li.innerHTML = `<button type="button" class="sw${f.vis ? '' : ' off'}" aria-label="${f.vis ? 'Hide' : 'Show'} f${SUB[i]}" aria-pressed="${f.vis}"></button>
+      <span class="fname">f${SUB[i]}(x) =</span>
+      <input type="text" id="fn-in-${f.id}" spellcheck="false" autocomplete="off" aria-label="Expression for f${SUB[i]}" placeholder="e.g. x^2 - 3">
+      <button type="button" class="fdel" aria-label="Remove f${SUB[i]}">×</button>
+      ${f.error ? `<div class="ferr"></div>` : ''}`;
+    const inp = li.querySelector('input'); inp.value = f.expr;
+    if (f.error) li.querySelector('.ferr').textContent = f.error;
+    li.querySelector('.sw').onclick = () => { f.vis = !f.vis; saveFns(); renderFns(); draw(); };
+    li.querySelector('.fdel').onclick = () => {
+      fns = fns.filter(g => g !== f);
+      if (activeId === f.id) activeId = fns[0] ? fns[0].id : null;
+      saveFns(); renderFns(); draw(); analyze();
+    };
+    const activate = () => { if (activeId !== f.id) { activeId = f.id; ul.querySelectorAll('.fn').forEach(el => el.classList.remove('active')); li.classList.add('active'); draw(); analyze(); } };
+    li.addEventListener('pointerdown', activate);
+    inp.addEventListener('focus', activate);
+    inp.addEventListener('input', () => {
+      f.expr = inp.value; compileFn(f); saveFns();
+      let er = li.querySelector('.ferr');
+      if (f.error) { if (!er) { er = document.createElement('div'); er.className = 'ferr'; li.append(er); } er.textContent = f.error; }
+      else if (er) er.remove();
+      draw(); analyze();
+    });
+    ul.append(li);
+  });
+  $('#addFn').disabled = fns.length >= 6;
+  $('#addFn').textContent = fns.length >= 6 ? 'Six functions is the limit' : '+ Add function';
+}
+$('#addFn').onclick = () => {
+  if (fns.length >= 6) return;
+  const used = new Set(fns.map(f => f.ci)); let ci = 0; while (used.has(ci)) ci++;
+  const f = { id: nextId++, expr: '', ci, vis: true }; compileFn(f); fns.push(f); activeId = f.id;
+  saveFns(); renderFns(); analyze();
+  const el = document.getElementById('fn-in-' + f.id); if (el) el.focus();
+};
+
+function niceStep(raw){
+  const p = Math.pow(10, Math.floor(Math.log10(raw))), n = raw / p;
+  return (n < 1.5 ? 1 : n < 3.5 ? 2 : n < 7.5 ? 5 : 10) * p;
+}
+function tick(v, step){
+  if (Math.abs(v) < step * 1e-9) return '0';
+  const a = Math.abs(v);
+  let s = (a >= 1e6 || a < 1e-4) ? v.toExponential(Math.max(0, Math.min(6, -Math.floor(Math.log10(step)) + Math.floor(Math.log10(a))))) .replace(/\.?0+e/, 'e')
+        : v.toFixed(Math.max(0, -Math.floor(Math.log10(step) + 1e-9)));
+  return s.replace('-', '−');
+}
+function label(text, x, y, align, base){
+  ctx.textAlign = align; ctx.textBaseline = base;
+  ctx.lineWidth = 3.5; ctx.strokeStyle = colors.plot; ctx.strokeText(text, x, y);
+  ctx.fillStyle = colors.muted; ctx.fillText(text, x, y);
+}
+function drawGrid(){
+  const sx = niceStep(90 / view.kx), sy = niceStep(90 / view.ky);
+  const mx = sx / 5 * view.kx >= 9 ? sx / 5 : sx / 2, my = sy / 5 * view.ky >= 9 ? sy / 5 : sy / 2;
+  const x0 = IX(0), x1 = IX(W), y0 = IY(H), y1 = IY(0);
+  ctx.lineWidth = 1;
+  for (const [step, color] of [[mx, colors.minor], [sx, colors.major]]) {
+    ctx.strokeStyle = color; ctx.beginPath();
+    for (let k = Math.ceil(x0 / step); k <= Math.floor(x1 / step); k++) { const p = Math.round(X(k * step)) + .5; ctx.moveTo(p, 0); ctx.lineTo(p, H); }
+    ctx.stroke();
+  }
+  for (const [step, color] of [[my, colors.minor], [sy, colors.major]]) {
+    ctx.strokeStyle = color; ctx.beginPath();
+    for (let k = Math.ceil(y0 / step); k <= Math.floor(y1 / step); k++) { const p = Math.round(Y(k * step)) + .5; ctx.moveTo(0, p); ctx.lineTo(W, p); }
+    ctx.stroke();
+  }
+  const ax = X(0), ay = Y(0);
+  ctx.strokeStyle = colors.axis; ctx.lineWidth = 1.25; ctx.beginPath();
+  if (ax >= 0 && ax <= W) { ctx.moveTo(Math.round(ax) + .5, 0); ctx.lineTo(Math.round(ax) + .5, H); }
+  if (ay >= 0 && ay <= H) { ctx.moveTo(0, Math.round(ay) + .5); ctx.lineTo(W, Math.round(ay) + .5); }
+  ctx.stroke();
+  ctx.font = '11px "IBM Plex Mono", ui-monospace, monospace';
+  const ly = Math.min(Math.max(ay + 5, 4), H - 17);
+  for (let k = Math.ceil(x0 / sx); k <= Math.floor(x1 / sx); k++) {
+    const v = k * sx; if (Math.abs(v) < sx * 1e-9) continue;
+    const p = X(v); if (p < 14 || p > W - 14) continue;
+    label(tick(v, sx), p, ly, 'center', 'top');
+  }
+  const right = ax > W - 60, lx = Math.min(Math.max(ax + 6, 5), W - 5);
+  for (let k = Math.ceil(y0 / sy); k <= Math.floor(y1 / sy); k++) {
+    const v = k * sy; if (Math.abs(v) < sy * 1e-9) continue;
+    const p = Y(v); if (p < 10 || p > H - 10) continue;
+    label(tick(v, sy), right ? Math.min(ax - 6, W - 5) : lx, p, right ? 'right' : 'left', 'middle');
+  }
+  if (ax >= 0 && ax <= W && ay >= 0 && ay <= H) label('0', ax - 5, ay + 5, 'right', 'top');
+}
+function curvePath(code){
+  ctx.beginPath(); let pen = false, py = 0;
+  for (let sx = 0; sx <= W; sx += 1) {
+    const y = ev(code, IX(sx));
+    if (!isFinite(y)) { pen = false; continue; }
+    const sy = Y(y);
+    if (pen && Math.abs(sy - py) > H * .75) {
+      const ym = ev(code, IX(sx - .5)), smy = Y(ym);
+      if (!isFinite(ym) || smy < Math.min(sy, py) - 2 || smy > Math.max(sy, py) + 2) pen = false;
+    }
+    const cy = Math.max(-2 * H, Math.min(3 * H, sy));
+    if (pen) ctx.lineTo(sx, cy); else ctx.moveTo(sx, cy);
+    pen = true; py = sy;
+  }
+}
+let hover = null, an = { roots: [], ext: [], a: NaN, b: NaN };
+function draw(){
+  if (!W) return;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.fillStyle = colors.plot; ctx.fillRect(0, 0, W, H);
+  drawGrid();
+  const act = activeFn();
+  // shaded integral
+  if (act && act.code && act.vis && $('#an-shade').checked && isFinite(an.a) && isFinite(an.b) && an.a !== an.b) {
+    const lo = Math.max(Math.min(an.a, an.b), IX(0)), hi = Math.min(Math.max(an.a, an.b), IX(W));
+    if (hi > lo) {
+      ctx.beginPath(); ctx.moveTo(X(lo), Y(0)); let any = false;
+      for (let sx = X(lo); sx <= X(hi) + .01; sx += 1) {
+        const x = Math.min(IX(sx), hi), y = ev(act.code, x);
+        if (isFinite(y)) { ctx.lineTo(X(x), Math.max(-2 * H, Math.min(3 * H, Y(y)))); any = true; }
+      }
+      ctx.lineTo(X(hi), Y(0)); ctx.closePath();
+      if (any) { ctx.globalAlpha = .16; ctx.fillStyle = colors.f[act.ci]; ctx.fill(); ctx.globalAlpha = 1; }
+    }
+  }
+  ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+  for (const f of fns) {
+    if (!f.vis || !f.code) continue;
+    const col = colors.f[f.ci];
+    if (f === act && f.dcode && $('#an-plotd').checked) {
+      curvePath(f.dcode); ctx.setLineDash([6, 5]); ctx.lineWidth = 1.6; ctx.strokeStyle = col; ctx.globalAlpha = .8; ctx.stroke();
+      ctx.setLineDash([]); ctx.globalAlpha = 1;
+    }
+    curvePath(f.code); ctx.lineWidth = f === act ? 2.6 : 2; ctx.strokeStyle = col; ctx.stroke();
+  }
+  // key points
+  if (act && act.code && act.vis) {
+    const col = colors.f[act.ci];
+    for (const r of an.roots) dot(X(r), Y(0), col, false);
+    for (const p of an.ext) dot(X(p.x), Y(p.y), col, true);
+  }
+  // trace
+  if (hover) {
+    const x = IX(hover.sx);
+    ctx.strokeStyle = colors.axis; ctx.globalAlpha = .55; ctx.setLineDash([3, 4]); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(Math.round(hover.sx) + .5, 0); ctx.lineTo(Math.round(hover.sx) + .5, H); ctx.stroke();
+    ctx.setLineDash([]); ctx.globalAlpha = 1;
+    for (const f of fns) {
+      if (!f.vis || !f.code) continue;
+      const y = ev(f.code, x), sy = Y(y);
+      if (isFinite(y) && sy > -10 && sy < H + 10) dot(hover.sx, sy, colors.f[f.ci], true, 5);
+    }
+  }
+}
+function dot(x, y, col, filled, r = 4.5){
+  if (x < -10 || x > W + 10 || y < -10 || y > H + 10) return;
+  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.fillStyle = filled ? col : colors.plot; ctx.fill();
+  ctx.lineWidth = 2; ctx.strokeStyle = filled ? colors.plot : col; ctx.stroke();
+  if (filled) { ctx.beginPath(); ctx.arc(x, y, r + 1, 0, Math.PI * 2); ctx.lineWidth = 1; ctx.strokeStyle = col; ctx.stroke(); }
+}
+let raf = 0;
+const redraw = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; draw(); }); };
+let anTimer = 0;
+const analyzeSoon = () => { clearTimeout(anTimer); anTimer = setTimeout(() => { analyze(); }, 140); };
+
+function fmtN(v, digits = 8){
+  if (!isFinite(v)) return 'undefined';
+  if (Math.abs(v) < 1e-11) return '0';
+  return pretty(G.format(v, { precision: digits, lowerExp: -6, upperExp: 9 }));
+}
+function resize(){
+  const r = canvas.getBoundingClientRect();
+  if (!r.width) return;
+  W = r.width; H = r.height; dpr = window.devicePixelRatio || 1;
+  canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+  if (!viewInit) { resetView(); viewInit = true; }
+  draw(); analyzeSoon();
+}
+function resetView(){ view.cx = 0; view.cy = 0; view.kx = view.ky = W / 20; redraw(); analyzeSoon(); }
+function zoomAt(sx, sy, fx, fy = fx){
+  const wx = IX(sx), wy = IY(sy);
+  view.kx = Math.min(1e9, Math.max(1e-7, view.kx * fx));
+  view.ky = Math.min(1e9, Math.max(1e-7, view.ky * fy));
+  view.cx = wx - (sx - W / 2) / view.kx; view.cy = wy - (H / 2 - sy) / view.ky;
+  redraw(); analyzeSoon(); updateReadout();
+}
+new ResizeObserver(resize).observe(canvas);
+
+const pts = new Map(); let pinch = null, dragged = false;
+const pos = e => { const r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
+canvas.addEventListener('pointerdown', e => {
+  canvas.setPointerCapture(e.pointerId); pts.set(e.pointerId, pos(e)); dragged = false;
+  if (pts.size === 2) {
+    const [a, b] = [...pts.values()];
+    const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+    pinch = { d0: Math.hypot(a.x - b.x, a.y - b.y) || 1, kx: view.kx, ky: view.ky, wx: IX(mid.x), wy: IY(mid.y) };
+  }
+});
+canvas.addEventListener('pointermove', e => {
+  const p = pos(e);
+  if (pts.has(e.pointerId)) {
+    const prev = pts.get(e.pointerId); pts.set(e.pointerId, p);
+    if (pts.size === 1) {
+      const dx = p.x - prev.x, dy = p.y - prev.y;
+      if (Math.abs(dx) + Math.abs(dy) > 0) { dragged = true; canvas.classList.add('dragging'); }
+      view.cx -= dx / view.kx; view.cy += dy / view.ky; analyzeSoon();
+    } else if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()], f = Math.hypot(a.x - b.x, a.y - b.y) / pinch.d0;
+      const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+      view.kx = pinch.kx * f; view.ky = pinch.ky * f;
+      view.cx = pinch.wx - (mid.x - W / 2) / view.kx; view.cy = pinch.wy - (H / 2 - mid.y) / view.ky;
+      analyzeSoon();
+    }
+  }
+  hover = { sx: p.x }; updateReadout(); redraw();
+});
+const up = e => { pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) canvas.classList.remove('dragging'); };
+canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', up);
+canvas.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') { hover = null; updateReadout(); redraw(); } });
+canvas.addEventListener('wheel', e => {
+  e.preventDefault(); const p = pos(e); const f = Math.exp(-e.deltaY * (e.deltaMode ? 0.05 : 0.0015));
+  if (e.shiftKey) zoomAt(p.x, p.y, f, 1); else if (e.altKey) zoomAt(p.x, p.y, 1, f); else zoomAt(p.x, p.y, f);
+}, { passive: false });
+$('#zIn').onclick = () => zoomAt(W / 2, H / 2, 1.5);
+$('#zOut').onclick = () => zoomAt(W / 2, H / 2, 1 / 1.5);
+$('#resetV').onclick = resetView;
+$('#fitY').onclick = () => {
+  const ys = [];
+  for (const f of fns) { if (!f.vis || !f.code) continue; for (let sx = 0; sx <= W; sx += 3) { const y = ev(f.code, IX(sx)); if (isFinite(y)) ys.push(y); } }
+  if (!ys.length) return;
+  ys.sort((a, b) => a - b);
+  const lo = ys[Math.floor(ys.length * .02)], hi = ys[Math.ceil(ys.length * .98) - 1];
+  const span = Math.max(hi - lo, 1e-9);
+  view.cy = (lo + hi) / 2; view.ky = H * .84 / span; redraw(); analyzeSoon();
+};
+
+function updateReadout(){
+  const el = $('#readout');
+  if (!hover) { el.textContent = 'Drag to pan · scroll or pinch to zoom · Shift+scroll zooms x only'; return; }
+  const x = IX(hover.sx);
+  const step = niceStep(90 / view.kx) / 100;
+  el.innerHTML = '';
+  const xs = document.createElement('span'); xs.innerHTML = `<b>x</b> = ${fmtN(Math.round(x / step) * step, 6)}`; el.append(xs);
+  fns.forEach((f, i) => {
+    if (!f.vis || !f.code) return;
+    const s = document.createElement('span'); s.style.color = `var(--f${f.ci + 1})`;
+    s.textContent = `f${SUB[i]} = ${fmtN(ev(f.code, x), 6)}`; el.append(s);
+  });
+}
+
+/* ---------- analysis ---------- */
+function evalNum(str){ try { return toReal(G.evaluate(prep(String(str).trim()))); } catch { return NaN; } }
+function bisectRoots(code, a, b, N = 700){
+  const res = [], tol = (b - a) * 1e-7;
+  let xp = a, yp = ev(code, a);
+  for (let i = 1; i <= N && res.length < 12; i++) {
+    const x = a + (b - a) * i / N, y = ev(code, x);
+    if (isFinite(yp) && isFinite(y)) {
+      let r = null;
+      if (y === 0) r = x;
+      else if (yp * y < 0) {
+        let lo = xp, hi = x, flo = yp;
+        for (let k = 0; k < 70; k++) { const m = (lo + hi) / 2, fm = ev(code, m); if (!isFinite(fm)) break; if (flo * fm <= 0) hi = m; else { lo = m; flo = fm; } }
+        const c = (lo + hi) / 2, fc = ev(code, c);
+        if (isFinite(fc) && Math.abs(fc) <= 1e-6 * Math.max(1, Math.abs(yp), Math.abs(y))) r = c;
+      }
+      if (r !== null && !(res.length && Math.abs(r - res[res.length - 1]) < tol)) res.push(r);
+    }
+    xp = x; yp = y;
+  }
+  return res;
+}
+function simpson(code, a, b){
+  if (a === b) return 0;
+  let sign = 1; if (a > b) { [a, b] = [b, a]; sign = -1; }
+  const n = 2000, h = (b - a) / n; let s = ev(code, a) + ev(code, b);
+  for (let i = 1; i < n; i++) s += (i % 2 ? 4 : 2) * ev(code, a + i * h);
+  return isFinite(s) ? sign * s * h / 3 : NaN;
+}
+function analyze(){
+  const f = activeFn();
+  const nm = $('#an-name');
+  an = { roots: [], ext: [], a: evalNum($('#an-a').value), b: evalNum($('#an-b').value) };
+  const R = $('#an-roots'), E = $('#an-ext');
+  R.innerHTML = ''; E.innerHTML = '';
+  if (!f || !f.code) {
+    nm.textContent = f ? nameOf(f) : '';
+    $('#an-deriv').textContent = f && f.error ? f.error : 'Enter a function to analyze it.';
+    $('#an-xout').textContent = ''; $('#an-int').textContent = '';
+    redraw(); return;
+  }
+  nm.textContent = nameOf(f) + '(x)'; nm.style.color = `var(--f${f.ci + 1})`;
+  $('#an-deriv').textContent = f.dstr || '—';
+  const xv = evalNum($('#an-x').value);
+  $('#an-xout').textContent = isFinite(xv)
+    ? `${nameOf(f)}(${fmtN(xv, 6)}) = ${fmtN(ev(f.code, xv))}` + (f.dcode ? `   ·   slope = ${fmtN(ev(f.dcode, xv))}` : '')
+    : 'Enter a number or expression for x.';
+  if (isFinite(an.a) && isFinite(an.b)) {
+    const I = simpson(f.code, an.a, an.b);
+    $('#an-int').textContent = isFinite(I) ? `∫ = ${fmtN(I, 9)}` : 'The function is undefined somewhere in this range.';
+  } else $('#an-int').textContent = 'Enter numeric limits, such as 0 and π.';
+  if (W) {
+    const x0 = IX(0), x1 = IX(W);
+    an.roots = bisectRoots(f.code, x0, x1);
+    if (f.dcode) {
+      const h = (x1 - x0) * 1e-4;
+      for (const r of bisectRoots(f.dcode, x0, x1)) {
+        const y = ev(f.code, r), yl = ev(f.code, r - h), yr = ev(f.code, r + h);
+        if (!isFinite(y)) continue;
+        if (y >= yl && y >= yr) an.ext.push({ x: r, y, kind: 'max' });
+        else if (y <= yl && y <= yr) an.ext.push({ x: r, y, kind: 'min' });
+      }
+    }
+  }
+  const li = html => { const el = document.createElement('li'); el.innerHTML = html; return el; };
+  if (!an.roots.length) R.append(li('<span>None visible</span>'));
+  an.roots.slice(0, 8).forEach(r => R.append(li(`x = ${fmtN(r, 7)}`)));
+  if (an.roots.length > 8) R.append(li(`<span>+${an.roots.length - 8} more</span>`));
+  if (!an.ext.length) E.append(li(`<span>${f.dcode ? 'None visible' : 'Needs a derivative'}</span>`));
+  an.ext.slice(0, 8).forEach(p => E.append(li(`(${fmtN(p.x, 5)}, ${fmtN(p.y, 5)})<span class="tag">${p.kind}</span>`)));
+  redraw();
+}
+['#an-x', '#an-a', '#an-b'].forEach(s => $(s).addEventListener('input', analyze));
+$('#an-plotd').addEventListener('change', redraw);
+$('#an-shade').addEventListener('change', redraw);
+
+/* ---------- tabs, theme, boot ---------- */
+const layout = $('#layout');
+function setView(v){
+  layout.dataset.view = v;
+  $('#tab-calc').setAttribute('aria-selected', v === 'calc');
+  $('#tab-graph').setAttribute('aria-selected', v === 'graph');
+  store.set('view', v);
+}
+$('#tab-calc').onclick = () => setView('calc');
+$('#tab-graph').onclick = () => setView('graph');
+setView(store.get('view', 'calc'));
+
+const retheme = () => { readColors(); draw(); };
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', retheme);
+new MutationObserver(retheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+if (document.fonts) document.fonts.ready.then(draw);
+
+readColors(); labelKeys(); renderHist(); renderFns();
+if (!hist.length) { exprEl.value = '√(2)×π + sin(π/6)'; caret = exprEl.value.length; preview(); }
+else showResult('0', 'preview');
+analyze();
+})();
+</script>
