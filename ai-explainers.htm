@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interactive AI Explainers | Transys</title>
+<meta name="description" content="Learn how AI works by playing with it: tokenization, word embeddings, neural networks and temperature sampling. Free interactive explainers by Transys.">
+<style>
+:root{--bg:#0a0f1c;--bg2:#0e1527;--card:#111a2e;--card2:#16213a;--line:rgba(255,255,255,.09);--text:#e9eef8;--muted:#97a6c0;--accent:#2dd4bf;--accent2:#3b82f6;--violet:#a78bfa;--gold:#f5c451;--radius:18px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(1160px,100% - 32px);margin-inline:auto}
+header{border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;background:rgba(10,15,28,.85);backdrop-filter:blur(12px)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{font-weight:800;font-size:1.2rem}
+.back{padding:8px 14px;border-radius:10px;color:var(--muted);font-weight:600}
+.back:hover{color:var(--text);background:rgba(255,255,255,.06)}
+.hero{padding:56px 0 28px}
+.kicker{color:var(--accent);font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:.8rem}
+h1{font-size:clamp(2rem,5vw,3rem);line-height:1.15;margin:8px 0 12px}
+.grad{background:linear-gradient(120deg,var(--accent),var(--accent2) 60%,var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--muted);font-size:1.08rem;max-width:62ch}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:26px 0 22px}
+.tab{background:var(--card);border:1px solid var(--line);color:var(--muted);padding:10px 16px;border-radius:12px;font:inherit;font-weight:700;cursor:pointer}
+.tab:hover{color:var(--text)}
+.tab[aria-selected="true"]{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#06101c;border-color:transparent}
+.panel{display:none;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;margin-bottom:60px}
+.panel.on{display:block}
+.panel h2{font-size:1.5rem;margin-bottom:6px}
+.panel>p.intro{color:var(--muted);max-width:75ch;margin-bottom:18px}
+.grid2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:24px;align-items:start}
+@media(max-width:820px){.grid2{grid-template-columns:1fr}.panel{padding:18px}}
+.box{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:16px}
+.box h3{font-size:1rem;margin-bottom:8px}
+.box p,.box li{color:var(--muted);font-size:.95rem}
+.box ul{padding-left:18px}
+.box+.box{margin-top:14px}
+textarea,select,input[type=text]{width:100%;background:#0b1222;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit}
+textarea{min-height:90px;resize:vertical}
+label{font-size:.88rem;color:var(--muted);font-weight:600;display:block;margin:10px 0 4px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:10px;padding:10px 16px;font:inherit;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#06101c}
+.btn.ghost{background:rgba(255,255,255,.06);color:var(--text);border:1px solid var(--line)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;font-family:ui-monospace,Consolas,monospace}
+.chip{border-radius:7px;padding:3px 7px;font-size:.95rem;color:#06101c;font-weight:600;position:relative;cursor:default}
+.chip .sp{opacity:.45}
+.chip:hover::after{content:attr(data-id);position:absolute;bottom:115%;left:0;background:#000;color:#fff;font-size:.75rem;padding:2px 6px;border-radius:5px;white-space:nowrap}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
+.stat{background:#0b1222;border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center}
+.stat b{display:block;font-size:1.4rem}
+.stat span{font-size:.78rem;color:var(--muted)}
+canvas{width:100%;height:auto;display:block;border-radius:12px;background:#0b1222;border:1px solid var(--line);touch-action:manipulation}
+#embCanvas{cursor:pointer}
+.mono{font-family:ui-monospace,Consolas,monospace}
+.out{margin-top:10px;font-size:.98rem}
+.out b{color:var(--accent)}
+.bars{margin-top:8px}
+.bar{display:grid;grid-template-columns:90px 1fr 54px;gap:10px;align-items:center;margin:6px 0;font-size:.92rem}
+.bar .track{height:18px;background:#0b1222;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+.bar .fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s}
+.bar.off{opacity:.35}
+.bar .pct{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.gen{background:#0b1222;border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:12px;min-height:48px;font-size:1.02rem}
+.gen em{color:var(--gold);font-style:normal;font-weight:700}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;align-items:end}
+.three .op{text-align:center;font-weight:800;color:var(--muted)}
+.analogy{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:6px;align-items:center}
+.analogy span{font-weight:800;color:var(--muted)}
+.legend{display:flex;gap:14px;font-size:.85rem;color:var(--muted);margin-top:8px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:middle}
+footer{border-top:1px solid var(--line);padding:24px 0;color:var(--muted);font-size:.9rem}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="index.html">Transys</a><a class="back" href="app.htm">&larr; More applications</a></div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="kicker">Interactive AI explainers</div>
+    <h1>See how <span class="grad">AI actually works</span></h1>
+    <p class="lead">Four hands-on demos of the ideas behind ChatGPT and other modern AI. Type, click, drag the sliders and watch what happens. Everything runs in your browser.</p>
+  </section>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-t="tok">1. Tokenization</button>
+    <button class="tab" role="tab" aria-selected="false" data-t="emb">2. Word embeddings</button>
+    <button class="tab" role="tab" aria-selected="false" data-t="nn">3. Neural network</button>
+    <button class="tab" role="tab" aria-selected="false" data-t="smp">4. Temperature &amp; sampling</button>
+  </div>
+
+  <!-- 1 TOKENIZATION -->
+  <section class="panel on" id="tok">
+    <h2>Tokenization: how AI reads text</h2>
+    <p class="intro">Language models never see letters or whole words. They see <b>tokens</b>: common words stay whole, rare words get chopped into pieces. Type below and watch your text split up.</p>
+    <div class="grid2">
+      <div>
+        <label for="tokIn">Your text</label>
+        <textarea id="tokIn">Transys builds unbelievable AI tools in Karachi, Pakistan! Tokenization is surprisingly important.</textarea>
+        <div class="chips" id="tokOut"></div>
+        <div class="stats">
+          <div class="stat"><b id="sChars">0</b><span>characters</span></div>
+          <div class="stat"><b id="sWords">0</b><span>words</span></div>
+          <div class="stat"><b id="sToks">0</b><span>tokens</span></div>
+          <div class="stat"><b id="sRatio">0</b><span>chars / token</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="box"><h3>What to notice</h3><ul>
+          <li>Common words like <span class="mono">the</span> and <span class="mono">is</span> are one token each.</li>
+          <li><span class="mono">unbelievable</span> becomes <span class="mono">un + believ + able</span>, so the model learns word parts.</li>
+          <li>Rare names like <span class="mono">Karachi</span> split into many small pieces.</li>
+          <li>A space usually belongs to the next token (shown as a faint dot).</li>
+        </ul></div>
+        <div class="box"><h3>Why it matters</h3><p>AI pricing and context limits are counted in tokens. English averages about 4 characters per token; Urdu and other languages often need more tokens for the same meaning. Hover a token to see its ID number, which is what the model really receives.</p></div>
+        <div class="box"><p><i>This is a simplified tokenizer with a small vocabulary, built to show the idea. Real ones learn ~50,000–200,000 pieces from data.</i></p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 EMBEDDINGS -->
+  <section class="panel" id="emb">
+    <h2>Word embeddings: meaning as location</h2>
+    <p class="intro">AI turns each word into a list of numbers, a point in space. Words with similar meanings end up close together. Real models use hundreds of dimensions; here we squash it to 2 so you can see it. <b>Click any two words</b> to compare them.</p>
+    <div class="grid2">
+      <div>
+        <canvas id="embCanvas" width="640" height="560" aria-label="Map of word embeddings"></canvas>
+        <div class="out" id="embInfo">Click a word to select it.</div>
+      </div>
+      <div>
+        <div class="box"><h3>Word arithmetic</h3>
+          <p>Directions in the space carry meaning. The step from <i>man</i> to <i>woman</i> is the same as from <i>king</i> to <i>queen</i>.</p>
+          <div class="analogy" style="margin-top:12px">
+            <select id="anA"></select><span>−</span><select id="anB"></select><span>+</span><select id="anC"></select>
+          </div>
+          <div class="row"><button class="btn" id="anGo">Calculate</button><button class="btn ghost" id="anClear">Clear</button></div>
+          <div class="out" id="anOut"></div>
+        </div>
+        <div class="box"><h3>Try these</h3><ul>
+          <li>king − man + woman</li>
+          <li>Karachi − Pakistan + England</li>
+          <li>puppy − dog + cat</li>
+        </ul></div>
+        <div class="box"><h3>Where it's used</h3><p>Search engines, recommendation systems and RAG chatbots all use embeddings to find text with similar <i>meaning</i>, not just matching keywords.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 NEURAL NETWORK -->
+  <section class="panel" id="nn">
+    <h2>Neural network: learning a boundary</h2>
+    <p class="intro">A neural network learns by adjusting its weights a tiny bit at a time to reduce its error. Pick a dataset, press <b>Train</b>, and watch it learn to separate the <span style="color:var(--accent)">teal</span> points from the <span style="color:var(--violet)">purple</span> ones.</p>
+    <div class="grid2">
+      <div>
+        <canvas id="nnCanvas" width="480" height="480" aria-label="Neural network decision boundary"></canvas>
+        <div class="legend"><span><i class="dot" style="background:var(--accent)"></i>class A</span><span><i class="dot" style="background:var(--violet)"></i>class B</span><span>background = network's guess</span></div>
+      </div>
+      <div>
+        <div class="box">
+          <label for="nnData">Dataset</label>
+          <select id="nnData"><option value="blobs">Two groups (easy)</option><option value="xor">XOR quadrants (medium)</option><option value="circle">Circle in ring (harder)</option><option value="spiral">Spiral (hard)</option></select>
+          <label for="nnHidden">Hidden neurons: <b id="nnHv">6</b></label>
+          <input type="range" id="nnHidden" min="1" max="16" value="6">
+          <label for="nnLr">Learning rate: <b id="nnLv">0.3</b></label>
+          <input type="range" id="nnLr" min="1" max="20" value="6">
+          <div class="row"><button class="btn" id="nnTrain">▶ Train</button><button class="btn ghost" id="nnReset">Reset</button></div>
+          <div class="stats" style="grid-template-columns:repeat(3,1fr)">
+            <div class="stat"><b id="nnEp">0</b><span>steps</span></div>
+            <div class="stat"><b id="nnLoss">–</b><span>loss</span></div>
+            <div class="stat"><b id="nnAcc">–</b><span>accuracy</span></div>
+          </div>
+        </div>
+        <div class="box"><h3>Experiments</h3><ul>
+          <li>XOR with <b>1 neuron</b> can't succeed: one neuron draws only a straight line.</li>
+          <li>Raise neurons to 4+ and it bends the boundary to solve XOR.</li>
+          <li>Set the learning rate very high and watch the loss jump around.</li>
+          <li>The spiral needs many neurons and patience. Deep learning stacks many layers for problems like this.</li>
+        </ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 SAMPLING -->
+  <section class="panel" id="smp">
+    <h2>Temperature &amp; sampling: how AI picks the next word</h2>
+    <p class="intro">A chatbot writes one token at a time. For each step it gives every possible next word a probability, then picks one. <b>Temperature</b> controls how adventurous that pick is.</p>
+    <div class="grid2">
+      <div>
+        <label for="smpPrompt">Prompt</label>
+        <select id="smpPrompt"></select>
+        <div class="bars" id="smpBars"></div>
+        <div class="row"><button class="btn" id="smpOne">Pick next word</button><button class="btn ghost" id="smpTen">Pick 10 times</button></div>
+        <div class="gen" id="smpGen"></div>
+      </div>
+      <div>
+        <div class="box">
+          <label for="smpT">Temperature: <b id="smpTv">1.0</b></label>
+          <input type="range" id="smpT" min="1" max="25" value="10">
+          <label for="smpK">Top-k (only consider the best k words): <b id="smpKv">9</b></label>
+          <input type="range" id="smpK" min="1" max="9" value="9">
+        </div>
+        <div class="box"><h3>What to notice</h3><ul>
+          <li><b>Low temperature (0.1)</b>: almost always the top word. Safe and predictable, good for facts and code.</li>
+          <li><b>High temperature (2.0)</b>: odd words like "banana" get a real chance. More creative, but riskier.</li>
+          <li><b>Top-k = 1</b> is "greedy" decoding: no randomness at all.</li>
+        </ul></div>
+        <div class="box"><p>This is also why the same question can get different answers from a chatbot: the model is sampling, not looking up a fixed reply.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">&copy; Transys · Interactive AI explainers · <a href="index.html"><u>Home</u></a></div></footer>
+
+<script>
+/* ---------- tabs ---------- */
+document.querySelectorAll('.tab').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.tab').forEach(function(x){x.setAttribute('aria-selected',x===b)});
+    document.querySelectorAll('.panel').forEach(function(p){p.classList.toggle('on',p.id===b.dataset.t)});
+    if(b.dataset.t==='emb')drawEmb();
+    if(b.dataset.t==='nn')drawNN();
+  });
+});
+
+/* ---------- 1. tokenizer ---------- */
+var VOCAB=("the a an is are was be in on of to and or for with at by from it this that you we they he she i my your our " +
+ "ai model models language tool tools build builds learn learning token tokens data computer software " +
+ "un re in dis pre able ible ing ed er est ly s es tion sion ment ness ful less ize ization al ic ive ous " +
+ "believ surpris import ant ity ent ence ance " +
+ "trans sys pak istan kar ach lah ore is lam abad " +
+ "hello world good great new make made work works how what why when where " +
+ "th he an in er on re at en nd ti es or te of ed is it al ar st to nt ng se ha as ou io le ve co me de hi ri ro ic ne ea ra ce").split(' ');
+var VSET={};VOCAB.forEach(function(v){if(v)VSET[v]=1});
+var MAXV=12;
+function tokenizeWord(w){
+  var out=[],i=0,lw=w.toLowerCase();
+  while(i<w.length){
+    var len=Math.min(MAXV,w.length-i),found=1;
+    for(;len>1;len--){if(VSET[lw.substr(i,len)]){found=len;break}}
+    out.push(w.substr(i,found));i+=found;
+  }
+  return out;
+}
+function hashId(s){var h=2166136261;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0)%50257}
+var TCOL=['#2dd4bf','#60a5fa','#a78bfa','#f5c451','#f472b6','#34d399','#fb923c'];
+function runTok(){
+  var txt=document.getElementById('tokIn').value,out=document.getElementById('tokOut');
+  out.innerHTML='';
+  var parts=txt.match(/\s*[A-Za-z0-9]+|\s*[^\sA-Za-z0-9]|\s+$/g)||[];
+  var n=0;
+  parts.forEach(function(p){
+    var lead=p.match(/^\s*/)[0],core=p.slice(lead.length);
+    var pieces=core?( /[A-Za-z0-9]/.test(core)?tokenizeWord(core):[core]):[];
+    pieces.forEach(function(pc,j){
+      var c=document.createElement('span');c.className='chip';
+      c.style.background=TCOL[n%TCOL.length];
+      var full=(j===0?lead.replace(/\s+/,' '):'')+pc;
+      c.dataset.id='token id '+hashId(full);
+      if(j===0&&lead){var s=document.createElement('span');s.className='sp';s.textContent='·';c.appendChild(s)}
+      c.appendChild(document.createTextNode(pc));
+      out.appendChild(c);n++;
+    });
+  });
+  var words=(txt.match(/[A-Za-z0-9]+/g)||[]).length;
+  document.getElementById('sChars').textContent=txt.length;
+  document.getElementById('sWords').textContent=words;
+  document.getElementById('sToks').textContent=n;
+  document.getElementById('sRatio').textContent=n?(txt.length/n).toFixed(1):'0';
+}
+document.getElementById('tokIn').addEventListener('input',runTok);runTok();
+
+/* ---------- 2. embeddings ---------- */
+var WORDS={
+ man:[2.0,2.0],woman:[2.0,4.0],king:[4.6,2.2],queen:[4.6,4.2],boy:[1.0,1.7],girl:[1.0,3.7],prince:[3.8,1.6],princess:[3.8,3.6],
+ cat:[8.0,7.6],dog:[8.8,7.9],puppy:[9.0,6.9],kitten:[8.2,6.6],lion:[7.4,8.5],tiger:[8.0,9.0],
+ apple:[1.6,7.8],mango:[1.0,8.5],banana:[2.4,8.7],orange:[1.7,9.2],
+ computer:[8.2,1.6],laptop:[8.9,2.2],python:[7.3,2.8],code:[8.0,3.3],software:[8.8,3.4],
+ Karachi:[4.6,6.2],Lahore:[5.3,6.5],Pakistan:[5.0,7.4],London:[6.0,5.6],England:[6.4,6.8]
+};
+var CAT={man:0,woman:0,king:0,queen:0,boy:0,girl:0,prince:0,princess:0,cat:1,dog:1,puppy:1,kitten:1,lion:1,tiger:1,apple:2,mango:2,banana:2,orange:2,computer:3,laptop:3,python:3,code:3,software:3,Karachi:4,Lahore:4,Pakistan:4,London:4,England:4};
+var CCOL=['#60a5fa','#f5c451','#34d399','#a78bfa','#f472b6'];
+var emb={sel:[],arrow:null};
+var ec=document.getElementById('embCanvas'),ex=ec.getContext('2d');
+function toPx(p){return [30+p[0]/10*(ec.width-60), ec.height-30-p[1]/10*(ec.height-60)]}
+function dist(a,b){return Math.hypot(a[0]-b[0],a[1]-b[1])}
+function sim(a,b){return Math.exp(-dist(a,b)/2.2)}
+function drawEmb(){
+  ex.clearRect(0,0,ec.width,ec.height);
+  ex.strokeStyle='rgba(255,255,255,.05)';ex.lineWidth=1;
+  for(var g=0;g<=10;g++){var a=toPx([g,0]),b=toPx([g,10]);ex.beginPath();ex.moveTo(a[0],a[1]);ex.lineTo(b[0],b[1]);ex.stroke();a=toPx([0,g]);b=toPx([10,g]);ex.beginPath();ex.moveTo(a[0],a[1]);ex.lineTo(b[0],b[1]);ex.stroke()}
+  if(emb.sel.length===2){var p=toPx(WORDS[emb.sel[0]]),q=toPx(WORDS[emb.sel[1]]);ex.strokeStyle='#f5c451';ex.setLineDash([6,5]);ex.lineWidth=2;ex.beginPath();ex.moveTo(p[0],p[1]);ex.lineTo(q[0],q[1]);ex.stroke();ex.setLineDash([])}
+  if(emb.arrow){var A=emb.arrow;
+    [[A.b,A.a],[A.c,A.r]].forEach(function(pr){var s=toPx(pr[0]),e=toPx(pr[1]);ex.strokeStyle='#2dd4bf';ex.lineWidth=2.5;ex.beginPath();ex.moveTo(s[0],s[1]);ex.lineTo(e[0],e[1]);ex.stroke();
+      var ang=Math.atan2(e[1]-s[1],e[0]-s[0]);ex.fillStyle='#2dd4bf';ex.beginPath();ex.moveTo(e[0],e[1]);ex.lineTo(e[0]-12*Math.cos(ang-.4),e[1]-12*Math.sin(ang-.4));ex.lineTo(e[0]-12*Math.cos(ang+.4),e[1]-12*Math.sin(ang+.4));ex.fill()});
+    var r=toPx(A.r);ex.strokeStyle='#fff';ex.lineWidth=2;ex.beginPath();ex.arc(r[0],r[1],14,0,7);ex.stroke();
+  }
+  ex.font='600 15px Inter,Segoe UI,sans-serif';ex.textBaseline='middle';
+  Object.keys(WORDS).forEach(function(w){
+    var p=toPx(WORDS[w]),on=emb.sel.indexOf(w)>=0;
+    ex.fillStyle=CCOL[CAT[w]];ex.beginPath();ex.arc(p[0],p[1],on?8:5,0,7);ex.fill();
+    if(on){ex.strokeStyle='#fff';ex.lineWidth=2;ex.stroke()}
+    ex.fillStyle=on?'#fff':'#c7d2e6';ex.fillText(w,p[0]+10,p[1]);
+  });
+}
+ec.addEventListener('click',function(e){
+  var r=ec.getBoundingClientRect(),mx=(e.clientX-r.left)*ec.width/r.width,my=(e.clientY-r.top)*ec.height/r.height,best=null,bd=28;
+  Object.keys(WORDS).forEach(function(w){var p=toPx(WORDS[w]),d=Math.hypot(p[0]-mx,p[1]-my);if(d<bd){bd=d;best=w}});
+  if(!best)return;
+  emb.arrow=null;
+  if(emb.sel.length>=2)emb.sel=[];
+  if(emb.sel[0]!==best)emb.sel.push(best);
+  var info=document.getElementById('embInfo');
+  if(emb.sel.length===1){
+    var nb=Object.keys(WORDS).filter(function(w){return w!==best}).sort(function(a,b){return dist(WORDS[a],WORDS[best])-dist(WORDS[b],WORDS[best])}).slice(0,3);
+    info.innerHTML='<b>'+best+'</b> is closest to: '+nb.join(', ')+'. Click a second word to compare.';
+  }else{
+    var s=sim(WORDS[emb.sel[0]],WORDS[emb.sel[1]]);
+    var verdict=s>.55?'very similar':s>.25?'somewhat related':'not related';
+    info.innerHTML='Similarity of <b>'+emb.sel[0]+'</b> and <b>'+emb.sel[1]+'</b>: <b>'+Math.round(s*100)+'%</b> ('+verdict+')';
+  }
+  drawEmb();
+});
+['anA','anB','anC'].forEach(function(id,i){var s=document.getElementById(id);Object.keys(WORDS).forEach(function(w){var o=document.createElement('option');o.textContent=w;s.appendChild(o)});s.value=['king','man','woman'][i]});
+document.getElementById('anGo').addEventListener('click',function(){
+  var a=document.getElementById("anA").value,b=document.getElementById("anB").value,c=document.getElementById("anC").value,A=WORDS[a],B=WORDS[b],C=WORDS[c];
+  var r=[A[0]-B[0]+C[0],A[1]-B[1]+C[1]];
+  var best=Object.keys(WORDS).filter(function(w){return [a,b,c].indexOf(w)<0}).sort(function(x,y){return dist(WORDS[x],r)-dist(WORDS[y],r)})[0];
+  emb.sel=[];emb.arrow={a:A,b:B,c:C,r:r};
+  document.getElementById('anOut').innerHTML=a+' − '+b+' + '+c+' ≈ <b>'+best+'</b>';
+  document.getElementById('embInfo').textContent='Arrows: the step from "'+b+'" to "'+a+'" is copied onto "'+c+'". The white circle marks where it lands.';
+  drawEmb();
+});
+document.getElementById('anClear').addEventListener('click',function(){emb.sel=[];emb.arrow=null;document.getElementById('anOut').textContent='';document.getElementById('embInfo').textContent='Click a word to select it.';drawEmb()});
+drawEmb();
+
+/* ---------- 3. neural network ---------- */
+var nc=document.getElementById('nnCanvas'),nx=nc.getContext('2d');
+var nn={pts:[],H:6,W1:[],b1:[],W2:[],b2:0,step:0,run:false};
+function rnd(){return Math.random()*2-1}
+function gauss(){return Math.sqrt(-2*Math.log(Math.random()+1e-9))*Math.cos(2*Math.PI*Math.random())}
+function makeData(kind){
+  var P=[],i;
+  for(i=0;i<200;i++){
+    var x,y,c;
+    if(kind==='blobs'){c=i%2;x=(c?.45:-.45)+gauss()*.2;y=(c?.4:-.4)+gauss()*.2}
+    else if(kind==='xor'){x=rnd()*.95;y=rnd()*.95;if(Math.abs(x)<.06)x+=.12*Math.sign(x||1);if(Math.abs(y)<.06)y+=.12*Math.sign(y||1);c=(x*y>0)?1:0}
+    else if(kind==='circle'){c=i%2;var r=c?Math.random()*.42:.62+Math.random()*.3,t=Math.random()*6.283;x=r*Math.cos(t);y=r*Math.sin(t)}
+    else{c=i%2;var k=Math.floor(i/2)/100,rr=k*.9,tt=k*3.6*Math.PI+(c?Math.PI:0);x=rr*Math.cos(tt)+gauss()*.03;y=rr*Math.sin(tt)+gauss()*.03}
+    P.push([x,y,c]);
+  }
+  return P;
+}
+function initNet(){
+  nn.H=+document.getElementById('nnHidden').value;
+  nn.W1=[];nn.b1=[];nn.W2=[];
+  for(var j=0;j<nn.H;j++){nn.W1.push([rnd(),rnd()]);nn.b1.push(rnd()*.5);nn.W2.push(rnd())}
+  nn.b2=0;nn.step=0;
+}
+function fwd(x,y,keep){
+  var h=[],s=nn.b2;
+  for(var j=0;j<nn.H;j++){var v=Math.tanh(nn.W1[j][0]*x+nn.W1[j][1]*y+nn.b1[j]);h.push(v);s+=nn.W2[j]*v}
+  var o=1/(1+Math.exp(-s));
+  return keep?{o:o,h:h}:o;
+}
+function trainStep(lr){
+  var H=nn.H,gW1=[],gb1=[],gW2=[],gb2=0,j,N=nn.pts.length;
+  for(j=0;j<H;j++){gW1.push([0,0]);gb1.push(0);gW2.push(0)}
+  nn.pts.forEach(function(p){
+    var f=fwd(p[0],p[1],true),dz=f.o-p[2];
+    gb2+=dz;
+    for(var j=0;j<H;j++){gW2[j]+=dz*f.h[j];var d=dz*nn.W2[j]*(1-f.h[j]*f.h[j]);gW1[j][0]+=d*p[0];gW1[j][1]+=d*p[1];gb1[j]+=d}
+  });
+  for(j=0;j<H;j++){nn.W2[j]-=lr*gW2[j]/N;nn.W1[j][0]-=lr*gW1[j][0]/N;nn.W1[j][1]-=lr*gW1[j][1]/N;nn.b1[j]-=lr*gb1[j]/N}
+  nn.b2-=lr*gb2/N;nn.step++;
+}
+function metrics(){
+  var L=0,ok=0;nn.pts.forEach(function(p){var o=fwd(p[0],p[1]);o=Math.min(Math.max(o,1e-7),1-1e-7);L+=-(p[2]*Math.log(o)+(1-p[2])*Math.log(1-o));if((o>.5)===(p[2]===1))ok++});
+  return [L/nn.pts.length,ok/nn.pts.length];
+}
+function toC(v){return (v+1.1)/2.2*nc.width}
+function drawNN(){
+  nx.fillStyle='#0b1222';nx.fillRect(0,0,nc.width,nc.height);
+  var W=nc.width,G=48,cs=W/G,i,j;
+  for(i=0;i<G;i++)for(j=0;j<G;j++){
+    var x=(i+.5)/G*2.2-1.1,y=1.1-(j+.5)/G*2.2,o=fwd(x,y),a=Math.abs(o-.5)*2;
+    var c=o>.5?[45,212,191]:[167,139,250];
+    nx.fillStyle='rgba('+c[0]+','+c[1]+','+c[2]+','+(0.06+0.22*a)+')';
+    nx.fillRect(i*cs,j*cs,cs,cs);
+  }
+  nn.pts.forEach(function(p){nx.beginPath();nx.arc(toC(p[0]),toC(-p[1]),4.5,0,7);nx.fillStyle=p[2]?'#2dd4bf':'#a78bfa';nx.fill();nx.strokeStyle='#ffffff';nx.lineWidth=1.5;nx.stroke()});
+  var m=metrics();
+  document.getElementById('nnEp').textContent=nn.step;
+  document.getElementById('nnLoss').textContent=m[0].toFixed(3);
+  document.getElementById('nnAcc').textContent=Math.round(m[1]*100)+'%';
+}
+function loop(){
+  if(!nn.run)return;
+  var lr=document.getElementById('nnLr').value/20*1;
+  for(var k=0;k<15;k++)trainStep(lr);
+  drawNN();
+  requestAnimationFrame(loop);
+}
+var tb=document.getElementById('nnTrain');
+tb.addEventListener('click',function(){nn.run=!nn.run;tb.textContent=nn.run?'❚❚ Pause':'▶ Train';if(nn.run)loop()});
+function resetNN(){nn.pts=makeData(document.getElementById('nnData').value);initNet();drawNN()}
+document.getElementById('nnReset').addEventListener('click',resetNN);
+document.getElementById('nnData').addEventListener('change',resetNN);
+document.getElementById('nnHidden').addEventListener('input',function(){document.getElementById('nnHv').textContent=this.value;initNet();drawNN()});
+function lrLabel(){document.getElementById('nnLv').textContent=(document.getElementById('nnLr').value/20).toFixed(2)}
+document.getElementById('nnLr').addEventListener('input',lrLabel);lrLabel();
+resetNN();
+
+/* ---------- 4. sampling ---------- */
+var PROMPTS=[
+ {p:'The cat sat on the',w:[['mat',3.2],['floor',2.6],['sofa',2.3],['roof',1.6],['table',1.5],['bed',1.4],['keyboard',0.6],['moon',-0.6],['banana',-1.3]]},
+ {p:'The capital of Pakistan is',w:[['Islamabad',5.0],['a',2.0],['located',1.7],['Karachi',1.4],['beautiful',1.1],['Lahore',0.9],['not',0.4],['green',-0.4],['pizza',-1.6]]},
+ {p:'Once upon a time, there was a',w:[['little',3.0],['young',2.6],['king',2.3],['girl',2.1],['dragon',1.6],['robot',0.9],['cloud',0.2],['spreadsheet',-0.8],['toaster',-1.0]]}
+];
+var ps=document.getElementById('smpPrompt');
+PROMPTS.forEach(function(o,i){var e=document.createElement('option');e.value=i;e.textContent=o.p+' ___';ps.appendChild(e)});
+function probs(){
+  var P=PROMPTS[ps.value],T=document.getElementById('smpT').value/10,K=+document.getElementById('smpK').value;
+  var sorted=P.w.slice().sort(function(a,b){return b[1]-a[1]}),allowed={};
+  sorted.slice(0,K).forEach(function(x){allowed[x[0]]=1});
+  var mx=Math.max.apply(null,P.w.map(function(x){return x[1]/T})),Z=0;
+  var e=P.w.map(function(x){var v=allowed[x[0]]?Math.exp(x[1]/T-mx):0;Z+=v;return [x[0],v]});
+  return e.map(function(x){return [x[0],x[1]/Z]});
+}
+function drawBars(){
+  document.getElementById('smpTv').textContent=(document.getElementById('smpT').value/10).toFixed(1);
+  document.getElementById('smpKv').textContent=document.getElementById('smpK').value;
+  var b=document.getElementById('smpBars');b.innerHTML='';
+  probs().forEach(function(x){
+    var d=document.createElement('div');d.className='bar'+(x[1]===0?' off':'');
+    d.innerHTML='<span class="mono">'+x[0]+'</span><div class="track"><div class="fill" style="width:'+(x[1]*100).toFixed(1)+'%"></div></div><span class="pct">'+(x[1]*100).toFixed(1)+'%</span>';
+    b.appendChild(d);
+  });
+}
+function pick(){var r=Math.random(),acc=0,pr=probs();for(var i=0;i<pr.length;i++){acc+=pr[i][1];if(r<acc)return pr[i][0]}return pr[0][0]}
+function show(n){
+  var out=[];for(var i=0;i<n;i++)out.push(pick());
+  var g=document.getElementById('smpGen');
+  if(n===1)g.innerHTML=PROMPTS[ps.value].p+' <em>'+out[0]+'</em>';
+  else{var c={};out.forEach(function(w){c[w]=(c[w]||0)+1});g.innerHTML='10 picks: '+Object.keys(c).sort(function(a,b){return c[b]-c[a]}).map(function(w){return '<em>'+w+'</em> ×'+c[w]}).join(', ')}
+}
+document.getElementById('smpOne').addEventListener('click',function(){show(1)});
+document.getElementById('smpTen').addEventListener('click',function(){show(10)});
+['smpT','smpK'].forEach(function(id){document.getElementById(id).addEventListener('input',drawBars)});
+ps.addEventListener('change',function(){drawBars();document.getElementById('smpGen').textContent=''});
+drawBars();
+</script>
+</body>
+</html>
